@@ -59,12 +59,7 @@ body { font-family: var(--font-family); background-color: var(--bg-page); color:
   color: var(--text-muted);
 }
 
-.nav-links a.active {
-  color: var(--primary-color);
-  position: relative;
-}
-
-.nav-links a.active::after {
+.nav-links a {
   content: '';
   position: absolute;
   bottom: -18px;
@@ -75,7 +70,7 @@ body { font-family: var(--font-family); background-color: var(--bg-page); color:
   border-radius: 2px 2px 0 0;
 }
 
-.nav-links a:hover:not(.active) {
+.nav-links a:hover{
   color: var(--text-main);
 }    
 .nav-left, .nav-right { display: flex; align-items: center; gap: 2rem; }
