@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,272 +14,607 @@
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <style>
-  :root {
-    --primary: #3b82f6;     
-    --primary-hover: #2563eb;
-    --primary-light: #eff6ff;
-    --bg-page: #f4f7fb;       
-    --bg-surface: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border-color: #e2e8f0;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
-    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05);
-    --font-family: 'Inter', system-ui, sans-serif;      
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    :root {
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --primary-light: #eff6ff;
+        --bg-page: #f4f7fb;
+        --bg-surface: #ffffff;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        --font-family: 'Inter', system-ui, sans-serif;
+        --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         --primary-color: #2563eb;
-}
+        --surface-color: #ffffff;
+    }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-family); background-color: var(--bg-page); color: var(--text-main); line-height: 1.5; }
-a {
-  text-decoration: none;
-  color: inherit;
-  transition: var(--transition);
-}
-/* Navbar */
-/* .navbar {
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: var(--font-family);
+        background-color: var(--bg-page);
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+        transition: var(--transition);
+    }
+
+    .nav-links a.active-nav {
+        color: var(--text-main);
+        font-weight: 600;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 4px;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: currentColor;
+        animation: spin 0.8s ease-in-out infinite;
+        margin-right: 6px;
+        vertical-align: sub;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Navbar */
+    /* .navbar {
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border-color);
     padding: 0 2rem; height: 64px;
     display: flex; align-items: center; justify-content: space-between;
 } */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 32px;
-  background-color: var(--surface-color);
-  border-bottom: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: var(--shadow-sm);
-}
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-muted);
-}
+    .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 32px;
+        background-color: var(--surface-color);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        box-shadow: var(--shadow-sm);
+    }
 
-.nav-links a {
-  color: var(--primary-color);
-  
-}
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-muted);
+    }
 
-.nav-links a:hover{
-  color: var(--text-main);
-}    
-.nav-left, .nav-right { display: flex; align-items: center; gap: 2rem; }
-.logo { display: flex; align-items: center; gap: 0.75rem; font-weight: 700; font-size: 1.1rem; }
-.logo-icon { 
-    background-color: var(--primary); color: white; border-radius: 6px; 
-    padding: 4px; width: 28px; height: 28px; 
-}
-.search-bar {
-    display: flex; align-items: center; background: #f1f5f9; padding: 0.5rem 1rem;
-    border-radius: 6px; color: var(--text-muted); width: 300px; margin-left:1rem;
-}
-.search-bar input { border: none; background: none; outline: none; margin-left: 8px; font-family: inherit; width: 100%; font-size: 0.85rem;}
-.icon-btn { color: var(--text-muted); cursor: pointer; }
-.profile-pic img { border-radius: 50%; width: 32px; height: 32px; }
+    .nav-links a {
+        color: var(--primary-color);
 
-/* Main layout */
-.main-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-.session-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 0.25rem; }
-.page-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; }
+    }
 
-/* Current session */
-.current-session { margin-bottom: 2rem; }
-.active-request-box {
-    background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px;
-    padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
-}
-.active-left { display: flex; align-items: center; gap: 1rem; }
-.badge-blue { background: #e0e7ff; color: #4338ca; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 4px; }
-.active-id { font-size: 1.5rem; font-weight: 700; color: #1e293b;}
-.active-subtext { margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
+    .nav-links a:hover {
+        color: var(--text-main);
+    }
 
-/* Table Section */
-.list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-.list-header h2 { font-size: 1.1rem; font-weight: 600; }
-.filter-data { font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+    .nav-left,
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
 
-.table-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); }
-.data-table { width: 100%; border-collapse: collapse; text-align: left; }
-.data-table th { background: #f8fafc; padding: 1rem; font-size: 0.7rem; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
-.data-table td { padding: 0.8rem;margin: 0.5rem; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); vertical-align: middle;}
-.req-id-link { color: var(--primary); font-weight: 500; text-decoration: none; cursor:pointer;width: 100%;}
-.req-id-link:hover { text-decoration: underline; }
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
 
-/* table components */
-.status-pill { font-size: 0.8rem; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: #e2e8f0; color: #475569; display:inline-block;}
+    .logo-icon {
+        background-color: var(--primary);
+        color: white;
+        border-radius: 6px;
+        padding: 4px;
+        width: 28px;
+        height: 28px;
+    }
 
-/* Footer */
-.table-footer { padding: 1rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.85rem; }
-.pagination { display: flex; gap: 0.5rem; }
-.btn-page { background: white; border: 1px solid var(--border-color); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;}
-.btn-page:disabled { opacity: 0.5; cursor: not-allowed; }
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background: #f1f5f9;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        color: var(--text-muted);
+        width: 300px;
+        margin-left: 1rem;
+    }
 
-/* Buttons */
-.btn-outline-blue { background: transparent; color: var(--primary); border: 1px solid var(--primary); border-radius: 6px; padding: 6px 16px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
-.btn-outline-blue:hover { background: var(--primary-light); }
+    .search-bar input {
+        border: none;
+        background: none;
+        outline: none;
+        margin-left: 8px;
+        font-family: inherit;
+        width: 100%;
+        font-size: 0.85rem;
+    }
 
-.btn-primary { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 8px 16px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background 0.2s;}
-.btn-primary:hover { background: var(--primary-hover); }
+    .icon-btn {
+        color: var(--text-muted);
+        cursor: pointer;
+    }
 
-.btn-secondary { background: white; color: var(--text-main); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 16px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background 0.2s;}
-.btn-secondary:hover { background: #f8fafc; }
+    .profile-pic img {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+    }
 
-/* Modal */
-.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-.modal-window { background: white; width: 500px; max-width: 90%; max-height: 90vh; border-radius: 8px; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); overflow:hidden;}
-.modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-.modal-header h2 { font-size: 1.1rem; font-weight: 600; }
-.close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
-.modal-body { padding: 1.5rem; overflow-y: auto; flex: 1; }
-.modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 8px; background: #f8fafc;}
+    /* Main layout */
+    .main-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
 
-/* Detail List */
-.form-list { display: flex; flex-direction: column; gap: 1rem; }
-.detail-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem; align-items:center;}
-.detail-label { color: var(--text-muted); font-size: 0.9rem; font-weight: 500;}
-.detail-value { font-weight: 500; font-size: 0.95rem; text-align: right; max-width:60%;}
-.detail-input { padding: 4px 8px; border:1px solid #cbd5e1; border-radius:4px; text-align:right;}
+    .session-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
+    }
 
-/* Filter */
-/* Filter Bar Styling */
-.filter-bar {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out, margin-bottom 0.3s;
-    background: var(--bg-surface);
-    border-radius: 8px;
-    border: 1px solid transparent;
-    margin-bottom: 0;
-}
+    .page-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
 
-.filter-bar.active {
-    max-height: 200px; /* Ajustez selon vos besoins */
-    margin-bottom: 1rem;
-    border: 1px solid var(--border-color);
-    padding: 1rem;
-}
+    /* Current session */
+    .current-session {
+        margin-bottom: 2rem;
+    }
 
-.filter-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
-    align-items: flex-end;
-}
+    .active-request-box {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: var(--shadow-sm);
+    }
 
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
+    .active-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
 
-.filter-group label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-muted);
-}
+    .badge-blue {
+        background: #e0e7ff;
+        color: #4338ca;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 4px;
+    }
 
-.filter-group select {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    font-family: inherit;
-    font-size: 0.85rem;
-    outline: none;
-    background-color: #f9fafb;
-}
+    .active-id {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
 
-.filter-actions {
-    display: flex;
-    align-items: center;
-}
-.multi-select-container {
-    background: #f8fafc;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    height: 120px;
-    overflow-y: auto;
-    padding: 8px;
-}
+    .active-subtext {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
 
-.custom-select {
-    position: relative;
-    width: 100%;
-}
+    /* Table Section */
+    .list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
 
-.select-input-wrapper {
-    display: flex;
-    align-items: center;
-    background: white;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 0 8px;
-}
+    .list-header h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
 
-.select-input-wrapper input {
-    border: none;
-    outline: none;
-    padding: 8px 4px;
-    width: 100%;
-    font-size: 0.85rem;
-}
+    .filter-data {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        cursor: pointer;
+    }
 
-.toggle-icon {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    color: var(--text-muted);
-}
+    .table-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }
 
-.options-dropdown {
-    position: absolute;
-    top: 105%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 100;
-    box-shadow: var(--shadow-lg);
-    display: none; /* Caché par défaut */
-    padding: 5px;
-}
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
 
-.options-dropdown.show {
-    display: block;
-    height: 90px;
-    overflow: scroll;
-}
+    .data-table th {
+        background: #f8fafc;
+        padding: 1rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border-color);
+    }
 
-.filter-option {
-    display: flex;
-    align-items: center;
-    padding: 6px 8px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    border-radius: 4px;
-}
+    .data-table td {
+        padding: 0.8rem;
+        margin: 0.5rem;
+        font-size: 0.8rem;
+        border-bottom: 1px solid var(--border-color);
+        vertical-align: middle;
+    }
 
-.filter-option:hover {
-    background: var(--primary-light);
-}
+    .req-id-link {
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        width: 100%;
+    }
 
-.filter-option input {
-    margin-right: 10px;
-}
+    .req-id-link:hover {
+        text-decoration: underline;
+    }
+
+    /* table components */
+    .status-pill {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background: #e2e8f0;
+        color: #475569;
+        display: inline-block;
+    }
+
+    /* Footer */
+    .table-footer {
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-page {
+        background: white;
+        border: 1px solid var(--border-color);
+        padding: 4px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    .btn-page:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Buttons */
+    .btn-outline-blue {
+        background: transparent;
+        color: var(--primary);
+        border: 1px solid var(--primary);
+        border-radius: 6px;
+        padding: 6px 16px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-outline-blue:hover {
+        background: var(--primary-light);
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-secondary:hover {
+        background: #f8fafc;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .modal-window {
+        background: white;
+        width: 500px;
+        max-width: 90%;
+        max-height: 90vh;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    .modal-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-muted);
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        background: #f8fafc;
+    }
+
+    /* Detail List */
+    .form-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px dashed #e2e8f0;
+        padding-bottom: 0.5rem;
+        align-items: center;
+    }
+
+    .detail-label {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .detail-value {
+        font-weight: 500;
+        font-size: 0.95rem;
+        text-align: right;
+        max-width: 60%;
+    }
+
+    .detail-input {
+        padding: 4px 8px;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        text-align: right;
+    }
+
+    /* Filter */
+    /* Filter Bar Styling */
+    .filter-bar {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out, margin-bottom 0.3s;
+        background: var(--bg-surface);
+        border-radius: 8px;
+        border: 1px solid transparent;
+        margin-bottom: 0;
+    }
+
+    .filter-bar.active {
+        max-height: 200px;
+        /* Ajustez selon vos besoins */
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-color);
+        padding: 1rem;
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        align-items: flex-end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .filter-group label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+
+    .filter-group select {
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        font-family: inherit;
+        font-size: 0.85rem;
+        outline: none;
+        background-color: #f9fafb;
+    }
+
+    .filter-actions {
+        display: flex;
+        align-items: center;
+    }
+
+    .multi-select-container {
+        background: #f8fafc;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        height: 120px;
+        overflow-y: auto;
+        padding: 8px;
+    }
+
+    .custom-select {
+        position: relative;
+        width: 100%;
+    }
+
+    .select-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 0 8px;
+    }
+
+    .select-input-wrapper input {
+        border: none;
+        outline: none;
+        padding: 8px 4px;
+        width: 100%;
+        font-size: 0.85rem;
+    }
+
+    .toggle-icon {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        color: var(--text-muted);
+    }
+
+    .options-dropdown {
+        position: absolute;
+        top: 105%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 100;
+        box-shadow: var(--shadow-lg);
+        display: none;
+        /* Caché par défaut */
+        padding: 5px;
+    }
+
+    .options-dropdown.show {
+        display: block;
+        height: 90px;
+        overflow: scroll;
+    }
+
+    .filter-option {
+        display: flex;
+        align-items: center;
+        padding: 6px 8px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .filter-option:hover {
+        background: var(--primary-light);
+    }
+
+    .filter-option input {
+        margin-right: 10px;
+    }
 </style>
+
 <body>
     <nav class="navbar">
         <div class="nav-left">
@@ -291,11 +627,12 @@ a {
                 <input type="text" id="global-search" placeholder="Search Request ID or Custom">
             </div>
             <div class="nav-links">
-          <a href="https://costing-home.vercel.app/">Dashboard</a>
-          <a href="https://request-costing.vercel.app/" id="nav-request">Request</a>
-          <a href="#" id="nav-complete">Cancel</a>
-          <a href="#" id="nav-calendar">Awaiting Techpack</a>
-        </div>
+                <a href="https://costing-home.vercel.app/">Dashboard</a>
+                <a href="https://request-costing.vercel.app/" id="nav-request">Request</a>
+                <a href="#" id="nav-awaiting-meeting" class="active-nav">Awaiting Meeting</a>
+                <a href="#" id="nav-cancel">Cancel</a>
+                <a href="#" id="nav-awaiting-techpack">Awaiting Techpack</a>
+            </div>
         </div>
         <div class="nav-right">
             <i data-feather="bell" class="icon-btn"></i>
@@ -319,69 +656,78 @@ a {
                 <!-- Changed 'Clear Selection' to 'Details' as requested -->
                 <button class="btn-outline-blue" id="cs-details-btn">DETAILS</button>
             </div>
-            <p class="active-subtext" id="cs-subtext" style="display: none;">Style: <span id="cs-style">-</span> | Customer: <span id="cs-customer">-</span></p>
+            <p class="active-subtext" id="cs-subtext" style="display: none;">Style: <span id="cs-style">-</span> |
+                Customer: <span id="cs-customer">-</span></p>
         </section>
 
         <!-- Requests List Container -->
         <section class="requests-list">
             <div class="list-header">
-                <h2>Awaiting Meeting Requests</h2>
+                <h2 id="table-title">Awaiting Meeting Requests</h2>
                 <span class="filter-data">Filter Data</span>
             </div>
 
-      <!-- Filter -->
-   <div id="filter-bar" class="filter-bar">
-    <div class="filter-grid">
-        <div class="filter-group">
-            <label>Title</label>
-            <div class="custom-select" id="select-Title">
-                <div class="select-input-wrapper">
-                    <input type="text" placeholder="Search Title..." onkeyup="filterOptions('Title', this.value)">
-                    <i data-feather="chevron-down" class="toggle-icon" onclick="toggleDropdown('Title')"></i>
-                </div>
-                <div class="options-dropdown" id="dropdown-Title"></div>
-            </div>
-        </div>
+            <!-- Filter -->
+            <div id="filter-bar" class="filter-bar">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Title</label>
+                        <div class="custom-select" id="select-Title">
+                            <div class="select-input-wrapper">
+                                <input type="text" placeholder="Search Title..."
+                                    onkeyup="filterOptions('Title', this.value)">
+                                <i data-feather="chevron-down" class="toggle-icon"
+                                    onclick="toggleDropdown('Title')"></i>
+                            </div>
+                            <div class="options-dropdown" id="dropdown-Title"></div>
+                        </div>
+                    </div>
 
-        <div class="filter-group">
-            <label>Customer</label>
-            <div class="custom-select" id="select-Customer">
-                <div class="select-input-wrapper">
-                    <input type="text" placeholder="Search Customer..." onkeyup="filterOptions('Customer', this.value)">
-                    <i data-feather="chevron-down" class="toggle-icon" onclick="toggleDropdown('Customer')"></i>
-                </div>
-                <div class="options-dropdown" id="dropdown-Customer"></div>
-            </div>
-        </div>
+                    <div class="filter-group">
+                        <label>Customer</label>
+                        <div class="custom-select" id="select-Customer">
+                            <div class="select-input-wrapper">
+                                <input type="text" placeholder="Search Customer..."
+                                    onkeyup="filterOptions('Customer', this.value)">
+                                <i data-feather="chevron-down" class="toggle-icon"
+                                    onclick="toggleDropdown('Customer')"></i>
+                            </div>
+                            <div class="options-dropdown" id="dropdown-Customer"></div>
+                        </div>
+                    </div>
 
-        <div class="filter-group">
-            <label>Assigned PL</label>
-            <div class="custom-select" id="select-PL_Name">
-                <div class="select-input-wrapper">
-                    <input type="text" placeholder="Search PL..." onkeyup="filterOptions('PL_Name', this.value)">
-                    <i data-feather="chevron-down" class="toggle-icon" onclick="toggleDropdown('PL_Name')"></i>
-                </div>
-                <div class="options-dropdown" id="dropdown-PL_Name"></div>
-            </div>
-        </div>
+                    <div class="filter-group">
+                        <label>Assigned PL</label>
+                        <div class="custom-select" id="select-PL_Name">
+                            <div class="select-input-wrapper">
+                                <input type="text" placeholder="Search PL..."
+                                    onkeyup="filterOptions('PL_Name', this.value)">
+                                <i data-feather="chevron-down" class="toggle-icon"
+                                    onclick="toggleDropdown('PL_Name')"></i>
+                            </div>
+                            <div class="options-dropdown" id="dropdown-PL_Name"></div>
+                        </div>
+                    </div>
 
-        <div class="filter-group">
-            <label>Meeting Date</label>
-            <div class="custom-select" id="select-Meeting_Date">
-                <div class="select-input-wrapper">
-                    <input type="text" placeholder="Search Date..." onkeyup="filterOptions('Meeting Date', this.value)">
-                    <i data-feather="chevron-down" class="toggle-icon" onclick="toggleDropdown('Meeting_Date')"></i>
+                    <div class="filter-group">
+                        <label>Meeting Date</label>
+                        <div class="custom-select" id="select-Meeting_Date">
+                            <div class="select-input-wrapper">
+                                <input type="text" placeholder="Search Date..."
+                                    onkeyup="filterOptions('Meeting Date', this.value)">
+                                <i data-feather="chevron-down" class="toggle-icon"
+                                    onclick="toggleDropdown('Meeting_Date')"></i>
+                            </div>
+                            <div class="options-dropdown" id="dropdown-Meeting_Date"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="options-dropdown" id="dropdown-Meeting_Date"></div>
+
+                <div class="filter-footer" style="margin-top: 1.5rem; display: flex; gap: 10px;">
+                    <button class="btn-primary" onclick="applyFilters()">Apply Filters</button>
+                    <button class="btn-secondary" onclick="resetFilters()">Clear All</button>
+                </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="filter-footer" style="margin-top: 1.5rem; display: flex; gap: 10px;">
-        <button class="btn-primary" onclick="applyFilters()">Apply Filters</button>
-        <button class="btn-secondary" onclick="resetFilters()">Clear All</button>
-    </div>
-</div>
             <div class="table-card">
                 <table class="data-table">
                     <thead>
@@ -398,7 +744,9 @@ a {
                     </thead>
                     <tbody id="table-body">
                         <!-- Filled by JS -->
-                        <tr><td colspan="8" style="text-align:center;">Loading data...</td></tr>
+                        <tr>
+                            <td colspan="8" style="text-align:center;">Loading data...</td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="table-footer">
@@ -430,12 +778,15 @@ a {
             <div class="modal-footer">
                 <button type="button" class="btn-primary" id="btn-edit" onclick="enableEditMode()">Edit</button>
                 <div id="edit-actions" style="display: none; gap: 8px;">
-                    <button type="button" class="btn-secondary" id="btn-cancel-edit" onclick="cancelEditMode()">Discard</button>
+                    <button type="button" class="btn-secondary" id="btn-cancel-edit"
+                        onclick="cancelEditMode()">Discard</button>
                     <button type="button" class="btn-primary" id="btn-save" onclick="saveEdit()">Save Changes</button>
                 </div>
                 <div id="main-actions" style="display: flex; gap: 8px;">
-                    <button type="button" class="btn-secondary" id="btn-cancel" onclick="updateStatus('Cancel')">Cancel</button>
-                    <button type="button" class="btn-primary" id="btn-process" onclick="updateStatus('Awaiting Techpack')">Process</button>
+                    <button type="button" class="btn-secondary" id="btn-cancel"
+                        onclick="updateStatus('Cancel')">Cancel</button>
+                    <button type="button" class="btn-primary" id="btn-process"
+                        onclick="updateStatus('Awaiting Techpack')">Process</button>
                 </div>
             </div>
         </div>
@@ -445,258 +796,275 @@ a {
         feather.replace();
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzSdyx3uNKZPhbhwg_eIc_VmRTvUNF8-Q5z9hunbr7seSuz2nNdO-awDI8qserEQHkr/exec";
 
-let globalData = [];
-let currentSessionRow = null;
-let currentModalRow = null;
-// let filteredData = [];
-let activeFilters = {
-    "Title": [],
-    "Customer": [],
-    "PL_Name": [],
-    "Meeting Date": []
-};
+        let globalData = [];
+        let currentSessionRow = null;
+        let currentModalRow = null;
+        let filteredData = [];
+        let activeViewMode = "Awaiting Meeting";
+        // let filteredData = [];
+        let activeFilters = {
+            "Title": [],
+            "Customer": [],
+            "PL_Name": [],
+            "Meeting Date": []
+        };
 
-const DETAIL_FIELDS = [
-    "C_Number", "Customer", "Customer Department", "TKL Season", 
-    "Main Fabric", "Fabric Header", "PL_Name", "Status", 
-    "Requested_Date", "Created By", "Folder Path"
-];
+        const DETAIL_FIELDS = [
+            "C_Number", "Title", "Customer", "Customer Department", "TKL Season",
+            "Main Fabric", "Fabric Header", "PL_Name", "Status",
+            "Requested_Date", "Created By", "Folder Path"
+        ];
 
-document.addEventListener("DOMContentLoaded", () => {
-    fetchData();
-    
-    // Search event
-    const searchInput = document.getElementById("global-search");
-    searchInput.addEventListener("keyup", (e) => {
-        if(e.key === "Enter") {
-            const query = searchInput.value.trim().toLowerCase();
-            if(!query) return;
-            const found = globalData.find(row => (row["C_Number"] || "").toLowerCase() === query);
-            if(found) {
-                setSession(found);
-                searchInput.value = ""; // clear after search
-            } else {
-                alert("Request ID not found in current list.");
-            }
-        }
-    });
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchData();
 
-    document.getElementById("cs-details-btn").addEventListener("click", () => {
-        if(currentSessionRow) {
-            openModal(currentSessionRow);
-        }
-    });
-
-    document.getElementById("modal-close").addEventListener("click", closeModal);
-    // Toggle Filter Bar
-    const filterBtn = document.querySelector(".filter-data");
-    filterBtn.addEventListener("click", () => {
-        const bar = document.getElementById("filter-bar");
-        bar.classList.toggle("active");
-    });
-
-    // Listeners pour les filtres
-    ['filter-title', 'filter-customer', 'filter-pl', 'filter-date'].forEach(id => {
-        document.getElementById(id).addEventListener('change', applyFilters);
-    });
-});
-
-async function fetchData() {
-    try {
-        const res = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({action: 'get_all'}),
-            headers: {'Content-Type': 'text/plain;charset=utf-8'}
-        });
-        const result = await res.json();
-        if(result.status === 'success') {
-            globalData = result.data.reverse(); // Newest first
-            filteredData = [...globalData]; // Initialise les données filtrées
-            
-            populateFilterOptions();
-            renderTable();
-            if(globalData.length > 0) {
-                // Latest request in current session
-                setSession(globalData[0]);
-            }
-        }
-    } catch(err) {
-        console.error("Failed to fetch", err);
-        // show error
-        document.getElementById("table-body").innerHTML = '<tr><td colspan="8">Failed to fetch data... Verify APPS_SCRIPT_URL.</td></tr>';
-    }
-}
-function initIcons() { feather.replace(); }
-
-function toggleDropdown(fieldId) {
-    const dropdown = document.getElementById(`dropdown-${fieldId.replace(' ', '_')}`);
-    // Fermer les autres dropdowns
-    document.querySelectorAll('.options-dropdown').forEach(d => {
-        if(d !== dropdown) d.classList.remove('show');
-    });
-    dropdown.classList.toggle('show');
-}
-
-function populateFilterOptions() {
-    const fields = ["Title", "Customer", "PL_Name", "Meeting Date"];
-    
-    fields.forEach(field => {
-        // On cible le container (en remplaçant l'espace par _ pour l'ID HTML)
-        const containerId = `container-${field.replace(' ', '_')}`;
-        const container = document.getElementById(containerId);
-        if(!container) return;
-
-        // Extraire les valeurs uniques
-        const uniqueValues = [...new Set(globalData.map(item => item[field]))]
-            .filter(val => val && val !== "")
-            .sort();
-
-        container.innerHTML = ""; // Vider le container
-
-        uniqueValues.forEach(val => {
-            const label = document.createElement('label');
-            label.className = "filter-option";
-            
-            // Création de la checkbox
-            const checkbox = document.createElement('input');
-            checkbox.type = "checkbox";
-            checkbox.value = val;
-            checkbox.dataset.field = field;
-            
-            // Listener pour mettre à jour les filtres actifs
-            checkbox.addEventListener('change', (e) => {
-                const f = e.target.dataset.field;
-                const v = e.target.value;
-                if(e.target.checked) {
-                    activeFilters[f].push(v);
-                } else {
-                    activeFilters[f] = activeFilters[f].filter(item => item !== v);
+            // Search event
+            const searchInput = document.getElementById("global-search");
+            searchInput.addEventListener("keyup", (e) => {
+                if (e.key === "Enter") {
+                    const query = searchInput.value.trim().toLowerCase();
+                    if (!query) return;
+                    const found = globalData.find(row => (row["C_Number"] || "").toLowerCase() === query);
+                    if (found) {
+                        setSession(found);
+                        searchInput.value = ""; // clear after search
+                    } else {
+                        alert("Request ID not found in current list.");
+                    }
                 }
-                // Optionnel: filtrer en temps réel au clic
-                // applyFilters(); 
             });
 
-            label.appendChild(checkbox);
-            label.append(val);
-            container.appendChild(label);
-        });
-    });
-}
-function populateFilterOptions() {
-    const fields = ["Title", "Customer", "PL_Name", "Meeting Date"];
-    fields.forEach(field => {
-        const containerId = `dropdown-${field.replace(' ', '_')}`;
-        const container = document.getElementById(containerId);
-        const uniqueValues = [...new Set(globalData.map(item => item[field]))]
-            .filter(val => val)
-            .sort();
+            document.getElementById("cs-details-btn").addEventListener("click", () => {
+                if (currentSessionRow) {
+                    openModal(currentSessionRow);
+                }
+            });
 
-        container.innerHTML = "";
-        uniqueValues.forEach(val => {
-            const label = document.createElement('label');
-            label.className = "filter-option";
-            label.innerHTML = `
+            document.getElementById("modal-close").addEventListener("click", closeModal);
+            // Toggle Filter Bar
+            const filterBtn = document.querySelector(".filter-data");
+            filterBtn.addEventListener("click", () => {
+                const bar = document.getElementById("filter-bar");
+                bar.classList.toggle("active");
+            });
+
+            // Listeners pour les filtres
+            ['filter-title', 'filter-customer', 'filter-pl', 'filter-date'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', applyFilters);
+            });
+
+            // Navbar listeners
+            document.getElementById("nav-awaiting-meeting").addEventListener("click", (e) => { e.preventDefault(); fetchData("Awaiting Meeting", e.target); });
+            document.getElementById("nav-cancel").addEventListener("click", (e) => { e.preventDefault(); fetchData("Cancel", e.target); });
+            document.getElementById("nav-awaiting-techpack").addEventListener("click", (e) => { e.preventDefault(); fetchData("Awaiting Techpack", e.target); });
+        });
+
+        async function fetchData(statusFilter = 'Awaiting Meeting', targetElement = null) {
+            // Update UI State
+            activeViewMode = statusFilter;
+            const target = targetElement || document.getElementById("nav-awaiting-meeting");
+            document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active-nav"));
+            if (target) target.classList.add("active-nav");
+            document.getElementById("table-title").innerText = statusFilter + " Requests";
+
+            document.getElementById("table-body").innerHTML = '<tr><td colspan="8" style="text-align:center;">Loading data from database...</td></tr>';
+
+            try {
+                const res = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'get_all', statusFilter: statusFilter }),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                });
+                const result = await res.json();
+                if (result.status === 'success') {
+                    globalData = result.data.reverse(); // Newest first
+
+                    applyFilters(); // Apply Initial View Modes
+                    populateFilterOptions();
+
+                    if (globalData.length > 0) {
+                        // Latest request in current session
+                        setSession(globalData[0]);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch", err);
+                // show error
+                document.getElementById("table-body").innerHTML = '<tr><td colspan="8">Failed to fetch data... Verify APPS_SCRIPT_URL.</td></tr>';
+            }
+        }
+        function initIcons() { feather.replace(); }
+
+        function toggleDropdown(fieldId) {
+            const dropdown = document.getElementById(`dropdown-${fieldId.replace(' ', '_')}`);
+            // Fermer les autres dropdowns
+            document.querySelectorAll('.options-dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.remove('show');
+            });
+            dropdown.classList.toggle('show');
+        }
+
+        function populateFilterOptions() {
+            const fields = ["Title", "Customer", "PL_Name", "Meeting Date"];
+
+            fields.forEach(field => {
+                // On cible le container (en remplaçant l'espace par _ pour l'ID HTML)
+                const containerId = `container-${field.replace(' ', '_')}`;
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                // Extraire les valeurs uniques
+                const uniqueValues = [...new Set(globalData.map(item => item[field]))]
+                    .filter(val => val && val !== "")
+                    .sort();
+
+                container.innerHTML = ""; // Vider le container
+
+                uniqueValues.forEach(val => {
+                    const label = document.createElement('label');
+                    label.className = "filter-option";
+
+                    // Création de la checkbox
+                    const checkbox = document.createElement('input');
+                    checkbox.type = "checkbox";
+                    checkbox.value = val;
+                    checkbox.dataset.field = field;
+
+                    // Listener pour mettre à jour les filtres actifs
+                    checkbox.addEventListener('change', (e) => {
+                        const f = e.target.dataset.field;
+                        const v = e.target.value;
+                        if (e.target.checked) {
+                            activeFilters[f].push(v);
+                        } else {
+                            activeFilters[f] = activeFilters[f].filter(item => item !== v);
+                        }
+                        // Optionnel: filtrer en temps réel au clic
+                        // applyFilters(); 
+                    });
+
+                    label.appendChild(checkbox);
+                    label.append(val);
+                    container.appendChild(label);
+                });
+            });
+        }
+        function populateFilterOptions() {
+            const fields = ["Title", "Customer", "PL_Name", "Meeting Date"];
+            fields.forEach(field => {
+                const containerId = `dropdown-${field.replace(' ', '_')}`;
+                const container = document.getElementById(containerId);
+                const uniqueValues = [...new Set(globalData.map(item => item[field]))]
+                    .filter(val => val)
+                    .sort();
+
+                container.innerHTML = "";
+                uniqueValues.forEach(val => {
+                    const label = document.createElement('label');
+                    label.className = "filter-option";
+                    label.innerHTML = `
                 <input type="checkbox" value="${val}" data-field="${field}" 
                 ${activeFilters[field].includes(val) ? 'checked' : ''} 
                 onchange="handleCheck(this)">
                 <span>${val}</span>
             `;
-            container.appendChild(label);
-        });
-    });
-    initIcons();
-}
-
-function handleCheck(checkbox) {
-    const field = checkbox.dataset.field;
-    const val = checkbox.value;
-    if(checkbox.checked) {
-        if(!activeFilters[field].includes(val)) activeFilters[field].push(val);
-    } else {
-        activeFilters[field] = activeFilters[field].filter(v => v !== val);
-    }
-}
-
-function filterOptions(field, text) {
-    const containerId = `dropdown-${field.replace(' ', '_')}`;
-    const container = document.getElementById(containerId);
-    const options = container.querySelectorAll('.filter-option');
-    const dropdown = document.getElementById(containerId);
-    
-    // Ouvrir le dropdown si on commence à écrire
-    if(text.length > 0) dropdown.classList.add('show');
-
-    options.forEach(opt => {
-        const val = opt.querySelector('span').innerText.toLowerCase();
-        if(val.includes(text.toLowerCase())) {
-            opt.style.display = "flex";
-        } else {
-            opt.style.display = "none";
+                    container.appendChild(label);
+                });
+            });
+            initIcons();
         }
-    });
-}
 
-// Fermer les dropdowns si on clique ailleurs
-window.onclick = function(event) {
-    if (!event.target.closest('.custom-select')) {
-        document.querySelectorAll('.options-dropdown').forEach(d => d.classList.remove('show'));
-    }
-}
+        function handleCheck(checkbox) {
+            const field = checkbox.dataset.field;
+            const val = checkbox.value;
+            if (checkbox.checked) {
+                if (!activeFilters[field].includes(val)) activeFilters[field].push(val);
+            } else {
+                activeFilters[field] = activeFilters[field].filter(v => v !== val);
+            }
+        }
 
-function applyFilters() {
-    filteredData = globalData.filter(row => {
-        // Pour chaque champ, si la liste activeFilters est vide, on laisse passer tout le monde.
-        // Sinon, la valeur de la ligne doit être incluse dans la liste des choix cochés.
-        return (activeFilters["Title"].length === 0 || activeFilters["Title"].includes(row["Title"])) &&
-               (activeFilters["Customer"].length === 0 || activeFilters["Customer"].includes(row["Customer"])) &&
-               (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"])) &&
-               (activeFilters["Meeting Date"].length === 0 || activeFilters["Meeting Date"].includes(row["Meeting Date"]));
-    });
+        function filterOptions(field, text) {
+            const containerId = `dropdown-${field.replace(' ', '_')}`;
+            const container = document.getElementById(containerId);
+            const options = container.querySelectorAll('.filter-option');
+            const dropdown = document.getElementById(containerId);
 
-    renderTable();
-}
+            // Ouvrir le dropdown si on commence à écrire
+            if (text.length > 0) dropdown.classList.add('show');
 
-function resetFilters() {
-    // Décocher toutes les cases
-    document.querySelectorAll('.multi-select-container input').forEach(cb => cb.checked = false);
-    
-    // Réinitialiser l'objet des filtres
-    activeFilters = {
-        "Title": [],
-        "Customer": [],
-        "PL_Name": [],
-        "Meeting Date": []
-    };
-    
-    filteredData = [...globalData];
-    renderTable();
-}
+            options.forEach(opt => {
+                const val = opt.querySelector('span').innerText.toLowerCase();
+                if (val.includes(text.toLowerCase())) {
+                    opt.style.display = "flex";
+                } else {
+                    opt.style.display = "none";
+                }
+            });
+        }
 
-function setSession(row) {
-    currentSessionRow = row;
-    document.getElementById("active-request-box").style.display = "flex";
-    document.getElementById("cs-subtext").style.display = "block";
-    document.getElementById("cs-request-id").innerText = row["C_Number"] || "-";
-    document.getElementById("cs-style").innerText = row["Title"] || "-";
-    document.getElementById("cs-customer").innerText = row["Customer"] || "-";
-}
+        // Fermer les dropdowns si on clique ailleurs
+        window.onclick = function (event) {
+            if (!event.target.closest('.custom-select')) {
+                document.querySelectorAll('.options-dropdown').forEach(d => d.classList.remove('show'));
+            }
+        }
 
-function renderTable() {
-    const tbody = document.getElementById("table-body");
-    tbody.innerHTML = "";
-    // document.getElementById("total-requests").innerText = `Total Requests: ${globalData.length}`;
-    document.getElementById("total-requests").innerText = `Total Requests: ${filteredData.length}`;
-    
-    if (filteredData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No matching records found.</td></tr>';
-        return;
-    }
-    // globalData.forEach(row => {
-    filteredData.forEach(row => {
-        const tr = document.createElement("tr");
-        
-        // Columns: Request ID, Title(Style), Customer, Assigned PL, Costing_RD, Status, Meeting Date, Action
-        tr.innerHTML = `
+        function applyFilters() {
+            filteredData = globalData.filter(row => {
+                // Pour chaque champ, si la liste activeFilters est vide, on laisse passer tout le monde.
+                // Sinon, la valeur de la ligne doit être incluse dans la liste des choix cochés.
+                return (activeFilters["Title"].length === 0 || activeFilters["Title"].includes(row["Title"])) &&
+                    (activeFilters["Customer"].length === 0 || activeFilters["Customer"].includes(row["Customer"])) &&
+                    (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"])) &&
+                    (activeFilters["Meeting Date"].length === 0 || activeFilters["Meeting Date"].includes(row["Meeting Date"]));
+            });
+
+            renderTable();
+        }
+
+        function resetFilters() {
+            // Décocher toutes les cases
+            document.querySelectorAll('.multi-select-container input').forEach(cb => cb.checked = false);
+
+            // Réinitialiser l'objet des filtres
+            activeFilters = {
+                "Title": [],
+                "Customer": [],
+                "PL_Name": [],
+                "Meeting Date": []
+            };
+
+            filteredData = [...globalData];
+            renderTable();
+        }
+
+        function setSession(row) {
+            currentSessionRow = row;
+            document.getElementById("active-request-box").style.display = "flex";
+            document.getElementById("cs-subtext").style.display = "block";
+            document.getElementById("cs-request-id").innerText = row["C_Number"] || "-";
+            document.getElementById("cs-style").innerText = row["Title"] || "-";
+            document.getElementById("cs-customer").innerText = row["Customer"] || "-";
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById("table-body");
+            tbody.innerHTML = "";
+            // document.getElementById("total-requests").innerText = `Total Requests: ${globalData.length}`;
+            document.getElementById("total-requests").innerText = `Total Requests: ${filteredData.length}`;
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No matching records found.</td></tr>';
+                return;
+            }
+            // globalData.forEach(row => {
+            filteredData.forEach(row => {
+                const tr = document.createElement("tr");
+
+                // Columns: Request ID, Title(Style), Customer, Assigned PL, Costing_RD, Status, Meeting Date, Action
+                tr.innerHTML = `
             <td><a class="req-id-link" onclick='openModalById("${row["C_Number"]}")'>${row["C_Number"] || ''}</a></td>
             <td>${row["Title"] || ''}</td>
             <td>${row["Customer"] || ''}</td>
@@ -706,153 +1074,173 @@ function renderTable() {
             <td>${row["Meeting Date"] || ''}</td>
             <td><button class="btn-outline-blue btn-sm" onclick='openModalById("${row["C_Number"]}")' style="padding:4px 8px;font-size:0.8rem;">Details</button></td>
         `;
-        tbody.appendChild(tr);
-    });
-}
-
-function openModalById(c_num) {
-    const row = globalData.find(r => r["C_Number"] === c_num);
-    if(row) openModal(row);
-}
-
-function openModal(row) {
-    currentModalRow = row;
-    document.getElementById("edit-row-index").value = row._rowIndex;
-    
-    const list = document.getElementById("modal-details-list");
-    list.innerHTML = "";
-    
-    DETAIL_FIELDS.forEach(field => {
-        const div = document.createElement('div');
-        div.className = "detail-row";
-        
-        let labelName = field === "C_Number" ? "Request ID" : field;
-        if(field === "PL_Name") labelName = "PL Name";
-        if(field === "Customer Department") labelName = "Cus Dept";
-        if(field === "Requested_Date") labelName = "Created";
-        
-        let val = row[field];
-        if(val === undefined || val === "") val = "N/A";
-        
-        let displayVal = val;
-        if(field === "Folder Path" && val !== "N/A") {
-             displayVal = `<a href="${val}" target="_blank" style="color:#3b82f6;">Open Folder</a>`;
+                tbody.appendChild(tr);
+            });
         }
-        
-        div.innerHTML = `
+
+        function openModalById(c_num) {
+            const row = globalData.find(r => r["C_Number"] === c_num);
+            if (row) openModal(row);
+        }
+
+        function openModal(row) {
+            currentModalRow = row;
+            document.getElementById("edit-row-index").value = row._rowIndex;
+
+            const list = document.getElementById("modal-details-list");
+            list.innerHTML = "";
+
+            DETAIL_FIELDS.forEach(field => {
+                const div = document.createElement('div');
+                div.className = "detail-row";
+
+                let labelName = field === "C_Number" ? "Request ID" : field;
+                if (field === "PL_Name") labelName = "PL Name";
+                if (field === "Customer Department") labelName = "Cus Dept";
+                if (field === "Requested_Date") labelName = "Created";
+
+                let val = row[field];
+                if (val === undefined || val === "") val = "N/A";
+
+                let displayVal = val;
+                if (field === "Folder Path" && val !== "N/A") {
+                    displayVal = `<a href="${val}" target="_blank" style="color:#3b82f6;">Open Folder</a>`;
+                }
+
+                div.innerHTML = `
             <span class="detail-label">${labelName}</span>
             <span class="detail-value" id="val-${field}">${displayVal}</span>
         `;
-        list.appendChild(div);
-    });
-    
-    cancelEditMode(); // reset state
-    document.getElementById("request-modal").style.display = "flex";
-}
+                list.appendChild(div);
+            });
 
-function closeModal() {
-    document.getElementById("request-modal").style.display = "none";
-}
+            cancelEditMode(); // reset state
+            document.getElementById("request-modal").style.display = "flex";
 
-let isEditing = false;
-function enableEditMode() {
-    isEditing = true;
-    document.getElementById("main-actions").style.display = "none";
-    document.getElementById("btn-edit").style.display = "none";
-    document.getElementById("edit-actions").style.display = "flex";
-    
-    // Transform values into inputs
-    DETAIL_FIELDS.forEach(field => {
-        if(field === "Folder Path" || field === "Created By" || field === "Requested_Date" || field === "C_Number") return; // Keep non-editable
-        
-        const valSpan = document.getElementById(`val-${field}`);
-        if(valSpan) {
-            const currentVal = currentModalRow[field] || "";
-            valSpan.innerHTML = `<input type="text" class="detail-input" id="input-${field}" value="${currentVal}">`;
-        }
-    });
-}
-
-function cancelEditMode() {
-    isEditing = false;
-    document.getElementById("main-actions").style.display = "flex";
-    document.getElementById("btn-edit").style.display = "block";
-    document.getElementById("edit-actions").style.display = "none";
-    if(currentModalRow && document.getElementById("request-modal").style.display !== "none") openModal(currentModalRow); // Re-render text mode
-}
-
-async function saveEdit() {
-    const updates = {};
-    let hasChanges = false;
-    DETAIL_FIELDS.forEach(field => {
-        const input = document.getElementById(`input-${field}`);
-        if(input) {
-            if (input.value !== currentModalRow[field]) {
-                updates[field] = input.value;
-                hasChanges = true;
+            // Hide action buttons for Cancel and Awaiting Techpack views
+            if (activeViewMode !== "Awaiting Meeting") {
+                document.getElementById("btn-edit").style.display = "none";
+                document.getElementById("main-actions").style.display = "none";
+            } else {
+                document.getElementById("btn-edit").style.display = "block";
+                document.getElementById("main-actions").style.display = "flex";
             }
         }
-    });
-    
-    if(!hasChanges) {
-        cancelEditMode();
-        return;
-    }
-    
-    await performUpdate(updates);
-}
 
-async function updateStatus(newStatus) {
-    if(currentModalRow.Status === newStatus) return; // No change
-    const updates = { Status: newStatus };
-    await performUpdate(updates);
-}
-
-async function performUpdate(updates) {
-    const btnCancel = document.getElementById("btn-cancel");
-    const btnProcess = document.getElementById("btn-process");
-    const btnSave = document.getElementById("btn-save");
-    
-    if(btnSave) btnSave.innerText = "Saving...";
-    if(btnCancel) btnCancel.disabled = true;
-    if(btnProcess) btnProcess.disabled = true;
-    
-    const payload = {
-        action: 'update',
-        rowIndex: currentModalRow._rowIndex,
-        updates: updates
-    };
-    
-    try {
-        const res = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload),
-            headers: {'Content-Type': 'text/plain;charset=utf-8'}
-        });
-        const result = await res.json();
-        
-        if(result.status === 'success') {
-            // update local data
-            Object.assign(currentModalRow, updates);
-            if(currentSessionRow && currentSessionRow._rowIndex === currentModalRow._rowIndex) {
-                Object.assign(currentSessionRow, updates);
-                setSession(currentSessionRow); // Refresh current session info if changed
-            }
-            renderTable();
-            closeModal();
-        } else {
-            alert("Update failed: " + result.message);
+        function closeModal() {
+            document.getElementById("request-modal").style.display = "none";
         }
-    } catch(err) {
-        console.error(err);
-        alert("Action failed. See console.");
-    } finally {
-        if(btnSave) btnSave.innerText = "Save Changes";
-        if(btnCancel) btnCancel.disabled = false;
-        if(btnProcess) btnProcess.disabled = false;
-    }
-}
+
+        let isEditing = false;
+        function enableEditMode() {
+            isEditing = true;
+            document.getElementById("main-actions").style.display = "none";
+            document.getElementById("btn-edit").style.display = "none";
+            document.getElementById("edit-actions").style.display = "flex";
+
+            // Transform values into inputs
+            DETAIL_FIELDS.forEach(field => {
+                if (field === "Folder Path" || field === "Created By" || field === "Requested_Date" || field === "C_Number") return; // Keep non-editable
+
+                const valSpan = document.getElementById(`val-${field}`);
+                if (valSpan) {
+                    const currentVal = currentModalRow[field] || "";
+                    valSpan.innerHTML = `<input type="text" class="detail-input" id="input-${field}" value="${currentVal}">`;
+                }
+            });
+        }
+
+        function cancelEditMode() {
+            isEditing = false;
+            document.getElementById("main-actions").style.display = "flex";
+            document.getElementById("btn-edit").style.display = "block";
+            document.getElementById("edit-actions").style.display = "none";
+            if (currentModalRow && document.getElementById("request-modal").style.display !== "none") openModal(currentModalRow); // Re-render text mode
+        }
+
+        async function saveEdit() {
+            const updates = {};
+            let hasChanges = false;
+            DETAIL_FIELDS.forEach(field => {
+                const input = document.getElementById(`input-${field}`);
+                if (input) {
+                    if (input.value !== currentModalRow[field]) {
+                        updates[field] = input.value;
+                        hasChanges = true;
+                    }
+                }
+            });
+
+            if (!hasChanges) {
+                cancelEditMode();
+                return;
+            }
+
+            await performUpdate(updates);
+        }
+
+        async function updateStatus(newStatus) {
+            if (currentModalRow.Status === newStatus) return; // No change
+            const updates = { Status: newStatus };
+            await performUpdate(updates);
+        }
+
+        async function performUpdate(updates) {
+            const btnCancel = document.getElementById("btn-cancel");
+            const btnProcess = document.getElementById("btn-process");
+            const btnSave = document.getElementById("btn-save");
+
+            const spinnerHtml = '<div class="spinner"></div>';
+
+            if (updates.Status === "Cancel" && btnCancel) {
+                btnCancel.innerHTML = spinnerHtml + 'Canceling...';
+            } else if (updates.Status === "Awaiting Techpack" && btnProcess) {
+                btnProcess.innerHTML = spinnerHtml + 'Processing...';
+            } else if (btnSave) {
+                btnSave.innerHTML = spinnerHtml + 'Saving...';
+            }
+
+            if (btnSave) btnSave.disabled = true;
+            if (btnCancel) btnCancel.disabled = true;
+            if (btnProcess) btnProcess.disabled = true;
+
+            const payload = {
+                action: 'update',
+                rowIndex: currentModalRow._rowIndex,
+                updates: updates
+            };
+
+            try {
+                const res = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                });
+                const result = await res.json();
+
+                if (result.status === 'success') {
+                    // update local data
+                    Object.assign(currentModalRow, updates);
+                    if (currentSessionRow && currentSessionRow._rowIndex === currentModalRow._rowIndex) {
+                        Object.assign(currentSessionRow, updates);
+                        setSession(currentSessionRow); // Refresh current session info if changed
+                    }
+                    renderTable();
+                    closeModal();
+                } else {
+                    alert("Update failed: " + result.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Action failed. See console.");
+            } finally {
+                if (btnSave) { btnSave.innerHTML = "Save Changes"; btnSave.disabled = false; }
+                if (btnCancel) { btnCancel.innerHTML = "Cancel"; btnCancel.disabled = false; }
+                if (btnProcess) { btnProcess.innerHTML = "Process"; btnProcess.disabled = false; }
+            }
+        }
 
     </script>
 </body>
+
 </html>
