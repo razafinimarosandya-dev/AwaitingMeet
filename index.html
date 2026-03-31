@@ -1063,12 +1063,25 @@
             filteredData.forEach(row => {
                 const tr = document.createElement("tr");
 
+                let assigneesHtml = '';
+                const assigneeList = (row["PL_Name"] || 'Unassigned').split(',').map(s => s.trim()).filter(s => s);
+                if (assigneeList.length === 0) assigneeList.push('Unassigned');
+                
+                assigneeList.forEach(name => {
+                    const avatarUrl = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name === 'Unassigned' ? 'U' : name) + '&background=random&color=fff';
+                    assigneesHtml += `
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                      <img src="${avatarUrl}" alt="${name}" style="width: 24px; height: 24px; border-radius: 50%;" />
+                      <span>${name}</span>
+                    </div>`;
+                });
+
                 // Columns: Request ID, Title(Style), Customer, Assigned PL, Costing_RD, Status, Meeting Date, Action
                 tr.innerHTML = `
             <td><a class="req-id-link" onclick='openModalById("${row["C_Number"]}")'>${row["C_Number"] || ''}</a></td>
             <td>${row["Title"] || ''}</td>
             <td>${row["Customer"] || ''}</td>
-            <td>${row["PL_Name"] || ''}</td>
+            <td>${assigneesHtml}</td>
             <td>${row["Costing Ready Date"] || ''}</td>
             <td><span class="status-pill">${row["Status"] || ''}</span></td>
             <td>${row["Meeting Date"] || ''}</td>
