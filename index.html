@@ -1060,6 +1060,12 @@
                 return;
             }
             // globalData.forEach(row => {
+            const formatDate = (dateStr) => {
+                if (!dateStr || String(dateStr).trim() === '-' || String(dateStr).trim() === '') return '';
+                const d = new Date(dateStr);
+                return isNaN(d) ? dateStr : d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            };
+
             filteredData.forEach(row => {
                 const tr = document.createElement("tr");
 
@@ -1082,9 +1088,9 @@
             <td>${row["Title"] || ''}</td>
             <td>${row["Customer"] || ''}</td>
             <td>${assigneesHtml}</td>
-            <td>${row["Costing Ready Date"] || ''}</td>
+            <td>${formatDate(row["Costing Ready Date"])}</td>
             <td><span class="status-pill">${row["Status"] || ''}</span></td>
-            <td>${row["Meeting Date"] || ''}</td>
+            <td>${formatDate(row["Meeting Date"])}</td>
             <td><button class="btn-outline-blue btn-sm" onclick='openModalById("${row["C_Number"]}")' style="padding:4px 8px;font-size:0.8rem;">Details</button></td>
         `;
                 tbody.appendChild(tr);
