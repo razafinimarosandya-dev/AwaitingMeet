@@ -826,7 +826,7 @@
         const DETAIL_FIELDS = [
             "C_Number", "Title", "Customer", "Customer Department", "TKL Season",
             "Main Fabric", "Fabric Header", "PL_Name", "Status",
-            "Requested_Date", "Created By", "Folder Path"
+            "Requested_Date", "Created By", "Remarks", "Folder Path"
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -1177,7 +1177,7 @@
 
             // Transform values into inputs
             DETAIL_FIELDS.forEach(field => {
-                if (field === "Folder Path" || field === "Created By" || field === "Requested_Date" || field === "C_Number") return; // Keep non-editable
+                if (field === "Folder Path" || field === "Created By" || field === "Requested_Date" || field === "C_Number" || field === "Remarks") return; // Keep non-editable
 
                 const valSpan = document.getElementById(`val-${field}`);
                 if (valSpan) {
