@@ -624,7 +624,7 @@
             </div>
             <div class="search-bar">
                 <i data-feather="search"></i>
-                <input type="text" id="global-search" placeholder="Search Request ID or Custom">
+                <input type="text" id="global-search" placeholder="Search Request ID or Custom or Title">
             </div>
             <div class="nav-links">
                 <a href="https://costing-home.vercel.app/">Home</a>
@@ -643,22 +643,6 @@
     </nav>
 
     <main class="main-container">
-        <!-- Current Session Container -->
-        <section class="current-session">
-            <p class="session-label">CURRENT SESSION</p>
-            <h1 class="page-title">Routine Meeting</h1>
-
-            <div class="active-request-box" id="active-request-box" style="display: none;">
-                <div class="active-left">
-                    <span class="badge-blue">ACTIVE REQUEST</span>
-                    <h2 id="cs-request-id" class="active-id">Loading...</h2>
-                </div>
-                <!-- Changed 'Clear Selection' to 'Details' as requested -->
-                <button class="btn-outline-blue" id="cs-details-btn">DETAILS</button>
-            </div>
-            <p class="active-subtext" id="cs-subtext" style="display: none;">Style: <span id="cs-style">-</span> |
-                Customer: <span id="cs-customer">-</span></p>
-        </section>
 
         <!-- Requests List Container -->
         <section class="requests-list">
@@ -785,18 +769,25 @@
 
                 <!-- Group 2: Main View Actions -->
                 <div id="main-actions" style="display: flex; gap: 8px; width: 100%; justify-content: flex-end;">
-                    
+
                     <!-- Pre-Process Toggle State -->
                     <div id="process-toggle-group" style="display: flex; gap: 8px;">
-                        <button type="button" class="btn-primary" id="btn-process-toggle" onclick="toggleProcessMenu()">Process</button>
-                        <button type="button" class="btn-secondary" id="btn-close-main" onclick="closeModal()">Close</button>
+                        <button type="button" class="btn-primary" id="btn-process-toggle"
+                            onclick="toggleProcessMenu()">Process</button>
+                        <button type="button" class="btn-secondary" id="btn-close-main"
+                            onclick="closeModal()">Close</button>
                     </div>
 
                     <!-- Post-Process Choice State -->
                     <div id="process-nested-menu" style="display: none; gap: 8px; align-items: center;">
-                        <button type="button" class="btn-primary" style="background-color: #10b981; border: none; color: white;" id="btn-process" onclick="updateStatus('Awaiting Techpack')">Submit</button>
-                        <button type="button" class="btn-danger" style="background-color: #ef4444; border: none; color: white; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer;" id="btn-cancel" onclick="updateStatus('Cancel')">Not Proceed</button>
-                        <button type="button" class="btn-outline-blue" id="btn-edit" onclick="enableEditMode()" style="padding: 10px 16px; border-radius: 8px; font-weight: 600;">Edit</button>
+                        <button type="button" class="btn-primary"
+                            style="background-color: #10b981; border: none; color: white;" id="btn-process"
+                            onclick="updateStatus('Awaiting Techpack')">Submit</button>
+                        <button type="button" class="btn-danger"
+                            style="background-color: #ef4444; border: none; color: white; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer;"
+                            id="btn-cancel" onclick="updateStatus('Cancel')">Not Proceed</button>
+                        <button type="button" class="btn-outline-blue" id="btn-edit" onclick="enableEditMode()"
+                            style="padding: 10px 16px; border-radius: 8px; font-weight: 600;">Edit</button>
                     </div>
 
                 </div>
@@ -822,11 +813,9 @@
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzSdyx3uNKZPhbhwg_eIc_VmRTvUNF8-Q5z9hunbr7seSuz2nNdO-awDI8qserEQHkr/exec";
 
         let globalData = [];
-        let currentSessionRow = null;
-        let currentModalRow = null;
         let filteredData = [];
         let activeViewMode = "Awaiting Meeting";
-        // let filteredData = [];
+        let globalSearchText = "";
         let activeFilters = {
             "Title": [],
             "Customer": [],
@@ -845,24 +834,9 @@
 
             // Search event
             const searchInput = document.getElementById("global-search");
-            searchInput.addEventListener("keyup", (e) => {
-                if (e.key === "Enter") {
-                    const query = searchInput.value.trim().toLowerCase();
-                    if (!query) return;
-                    const found = globalData.find(row => (row["C_Number"] || "").toLowerCase() === query);
-                    if (found) {
-                        setSession(found);
-                        searchInput.value = ""; // clear after search
-                    } else {
-                        alert("Request ID not found in current list.");
-                    }
-                }
-            });
-
-            document.getElementById("cs-details-btn").addEventListener("click", () => {
-                if (currentSessionRow) {
-                    openModal(currentSessionRow);
-                }
+            searchInput.addEventListener("input", (e) => {
+                globalSearchText = e.target.value.trim().toLowerCase();
+                applyFilters();
             });
 
             document.getElementById("modal-close").addEventListener("click", closeModal);
@@ -907,11 +881,6 @@
 
                     applyFilters(); // Apply Initial View Modes
                     populateFilterOptions();
-
-                    if (globalData.length > 0) {
-                        // Latest request in current session
-                        setSession(globalData[0]);
-                    }
                 }
             } catch (err) {
                 console.error("Failed to fetch", err);
@@ -1038,9 +1007,13 @@
 
         function applyFilters() {
             filteredData = globalData.filter(row => {
-                // Pour chaque champ, si la liste activeFilters est vide, on laisse passer tout le monde.
-                // Sinon, la valeur de la ligne doit être incluse dans la liste des choix cochés.
-                return (activeFilters["Title"].length === 0 || activeFilters["Title"].includes(row["Title"])) &&
+                const matchSearch = globalSearchText === "" ||
+                    String(row["C_Number"] || "").toLowerCase().includes(globalSearchText) ||
+                    String(row["Title"] || "").toLowerCase().includes(globalSearchText) ||
+                    String(row["Customer"] || "").toLowerCase().includes(globalSearchText);
+
+                return matchSearch &&
+                    (activeFilters["Title"].length === 0 || activeFilters["Title"].includes(row["Title"])) &&
                     (activeFilters["Customer"].length === 0 || activeFilters["Customer"].includes(row["Customer"])) &&
                     (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"])) &&
                     (activeFilters["Meeting Date"].length === 0 || activeFilters["Meeting Date"].includes(row["Meeting Date"]));
@@ -1065,14 +1038,7 @@
             renderTable();
         }
 
-        function setSession(row) {
-            currentSessionRow = row;
-            document.getElementById("active-request-box").style.display = "flex";
-            document.getElementById("cs-subtext").style.display = "block";
-            document.getElementById("cs-request-id").innerText = row["C_Number"] || "-";
-            document.getElementById("cs-style").innerText = row["Title"] || "-";
-            document.getElementById("cs-customer").innerText = row["Customer"] || "-";
-        }
+
 
         function renderTable() {
             const tbody = document.getElementById("table-body");
@@ -1097,7 +1063,7 @@
                 let assigneesHtml = '';
                 const assigneeList = (row["PL_Name"] || 'Unassigned').split(',').map(s => s.trim()).filter(s => s);
                 if (assigneeList.length === 0) assigneeList.push('Unassigned');
-                
+
                 let limit = 3;
                 let fullNames = assigneeList.join(', ');
                 assigneesHtml += `<div style="display:flex; flex-direction:column; gap:4px;" title="All Assigned PLs:\n${fullNames.replace(/, /g, '\n')}">`;
@@ -1227,7 +1193,7 @@
             document.getElementById("btn-edit").style.display = "block";
             document.getElementById("edit-actions").style.display = "none";
             if (!preventRender && currentModalRow && document.getElementById("request-modal").style.display !== "none") {
-                 openModal(currentModalRow); // Re-render text mode
+                openModal(currentModalRow); // Re-render text mode
             }
         }
 
