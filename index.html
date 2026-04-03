@@ -1128,14 +1128,20 @@
                 if (val === undefined || val === "") val = "N/A";
 
                 let displayVal = val;
-                // Format Created date exactly to YYYY-MM-DD
+                // Format Created date exactly to DD/MM/YYYY
                 if (field === "Requested_Date" && val !== "N/A") {
-                    if (typeof val === 'string' && val.includes('T')) {
-                        displayVal = val.split('T')[0];
-                    } else if (typeof val === 'string' && val.includes(' ')) {
-                        displayVal = val.split(' ')[0];
-                    } else if (val instanceof Date) {
-                        displayVal = val.toISOString().split('T')[0];
+                    let d = null;
+                    if (val instanceof Date) {
+                        d = val;
+                    } else {
+                        d = new Date(val);
+                    }
+                    
+                    if (d && !isNaN(d)) {
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const year = d.getFullYear();
+                        displayVal = `${day}/${month}/${year}`;
                     }
                 }
 
