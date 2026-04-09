@@ -648,7 +648,7 @@
         <!-- Requests List Container -->
         <section class="requests-list">
             <div class="list-header">
-                <h2 id="table-title">Meeting</h2>
+                <h2 id="table-title">Awaiting Meeting</h2>
                 <span class="filter-data">Filter Data</span>
             </div>
 
@@ -938,7 +938,7 @@
             const target = targetElement || document.getElementById("nav-awaiting-meeting");
             document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active-nav"));
             if (target) target.classList.add("active-nav");
-            document.getElementById("table-title").innerText = statusFilter + " Requests";
+            document.getElementById("table-title").innerText = statusFilter;
 
             document.getElementById("table-body").innerHTML = '<tr><td colspan="8" style="text-align:center;">Loading data from database...</td></tr>';
 
