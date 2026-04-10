@@ -613,6 +613,53 @@
     .filter-option input {
         margin-right: 10px;
     }
+    .hero-stats {
+        display: flex;
+        gap: 12px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+    }
+
+    .hero-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+    }
+
+    .hero-badge-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .hero-badge-dot.emerald { background-color: #10b981; }
+    .hero-badge-dot.blue { background-color: #3b82f6; }
+    .hero-badge-dot.red { background-color: #ef4444; }
+
+    .hero-badge strong {
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .list-header-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .header-subtitle {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
 </style>
 
 <body>
@@ -647,8 +694,28 @@
 
         <!-- Requests List Container -->
         <section class="requests-list">
-            <div class="list-header">
-                <h2 id="table-title">Awaiting Meeting</h2>
+            <div class="list-header" style="align-items: flex-start;">
+                <div class="list-header-content">
+                    <h2 id="table-title">Awaiting Meeting</h2>
+                    <p class="header-subtitle">Techpack</p>
+                    <div class="hero-stats">
+                        <div class="hero-badge hero-badge--awaiting">
+                            <div class="hero-badge-dot emerald"></div>
+                            <span>Awaiting</span>
+                            <strong id="heroBadgeAwaiting">0</strong>
+                        </div>
+                        <div class="hero-badge hero-badge--cancel">
+                            <div class="hero-badge-dot red"></div>
+                            <span>Cancel</span>
+                            <strong id="heroBadgeCancel">0</strong>
+                        </div>
+                        <div class="hero-badge hero-badge--complete">
+                            <div class="hero-badge-dot blue"></div>
+                            <span>Complete</span>
+                            <strong id="heroBadgeComplete">0</strong>
+                        </div>
+                    </div>
+                </div>
                 <span class="filter-data">Filter Data</span>
             </div>
 
@@ -823,14 +890,14 @@
 
                     <!-- Post-Process Choice State -->
                     <div id="process-nested-menu" style="display: none; gap: 8px; align-items: center;">
-                        <button type="button" class="btn-primary"
-                            style="background-color: #10b981; border: none; color: white;" id="btn-process"
-                            onclick="updateStatus('Awaiting Techpack')">Submit</button>
+                        <button type="button" class="btn-outline-blue" id="btn-edit" onclick="enableEditMode()"
+                            style="padding: 10px 16px; border-radius: 8px; font-weight: 600;">Edit</button>
                         <button type="button" class="btn-danger"
                             style="background-color: #ef4444; border: none; color: white; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer;"
                             id="btn-cancel" onclick="updateStatus('Cancel')">Not Proceed</button>
-                        <button type="button" class="btn-outline-blue" id="btn-edit" onclick="enableEditMode()"
-                            style="padding: 10px 16px; border-radius: 8px; font-weight: 600;">Edit</button>
+                        <button type="button" class="btn-primary"
+                            style="background-color: #10b981; border: none; color: white;" id="btn-process"
+                            onclick="updateStatus('Awaiting Techpack')">Submit</button>
                     </div>
 
                 </div>
@@ -912,16 +979,31 @@
 
                     document.getElementById("table-title").innerText = "Loading Calendar...";
                     try {
-                        const res = await fetch(APPS_SCRIPT_URL, {
-                            method: 'POST',
-                            body: JSON.stringify({ action: 'get_all', statusFilter: "Awaiting Techpack" }),
-                            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                        });
-                        const result = await res.json();
+                        const fetchAll = async () => {
+                            const statuses = ["Awaiting Meeting", "Cancel", "Awaiting Techpack"];
+                            const promises = statuses.map(s => 
+                                fetch(APPS_SCRIPT_URL, {
+                                    method: 'POST',
+                                    body: JSON.stringify({ action: 'get_all', statusFilter: s }),
+                                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                                }).then(r => r.json())
+                            );
+                            const results = await Promise.all(promises);
+                            let combined = [];
+                            results.forEach(res => {
+                                if (res.status === 'success') combined = combined.concat(res.data);
+                            });
+                            return combined;
+                        };
+
+                        const allData = await fetchAll();
                         let techpackData = [];
-                        if (result.status === 'success') {
-                            techpackData = result.data.reverse();
-                        }
+                        globalData = allData.reverse();
+                        updateHeroBadges();
+                        
+                        const getStatus = (r) => String(r.status || r.Status || (r.raw && r.raw.Status) || "").trim().toLowerCase();
+                        techpackData = globalData.filter(r => getStatus(r) === "awaiting techpack");
+                        
                         renderCalendar(techpackData);
                         document.getElementById("table-title").innerText = "Calendar View";
                     } catch (err) {
@@ -931,6 +1013,17 @@
                 });
             }
         });
+
+        function updateHeroBadges() {
+            const getStatus = (r) => String(r.status || r.Status || (r.raw && r.raw.Status) || "").trim().toLowerCase();
+            const awaitingCount = globalData.filter(r => getStatus(r) === "awaiting meeting").length;
+            const cancelCount = globalData.filter(r => getStatus(r) === "cancel").length;
+            const completeCount = globalData.filter(r => getStatus(r) === "awaiting techpack").length;
+
+            if (document.getElementById("heroBadgeAwaiting")) document.getElementById("heroBadgeAwaiting").innerText = awaitingCount;
+            if (document.getElementById("heroBadgeCancel")) document.getElementById("heroBadgeCancel").innerText = cancelCount;
+            if (document.getElementById("heroBadgeComplete")) document.getElementById("heroBadgeComplete").innerText = completeCount;
+        }
 
         async function fetchData(statusFilter = 'Awaiting Meeting', targetElement = null) {
             // Update UI State
@@ -943,21 +1036,29 @@
             document.getElementById("table-body").innerHTML = '<tr><td colspan="8" style="text-align:center;">Loading data from database...</td></tr>';
 
             try {
-                const res = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'get_all', statusFilter: statusFilter }),
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                // We MUST fetch all 3 statuses in parallel because the backend filters 'get_all' by status
+                const statuses = ["Awaiting Meeting", "Cancel", "Awaiting Techpack"];
+                const promises = statuses.map(s => 
+                    fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: 'get_all', statusFilter: s }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    }).then(r => r.json())
+                );
+                
+                const results = await Promise.all(promises);
+                let combined = [];
+                results.forEach(res => {
+                    if (res.status === 'success' && res.data) combined = combined.concat(res.data);
                 });
-                const result = await res.json();
-                if (result.status === 'success') {
-                    globalData = result.data.reverse(); // Newest first
 
-                    applyFilters(); // Apply Initial View Modes
-                    populateFilterOptions();
-                }
+                globalData = combined.reverse(); // Newest first
+                updateHeroBadges();
+                applyFilters(); 
+                populateFilterOptions();
+                
             } catch (err) {
                 console.error("Failed to fetch", err);
-                // show error
                 document.getElementById("table-body").innerHTML = '<tr><td colspan="8">Failed to fetch data... Verify APPS_SCRIPT_URL.</td></tr>';
             }
         }
@@ -1079,17 +1180,25 @@
         }
 
         function applyFilters() {
+            const currentStatusTarget = String(activeViewMode || "").trim().toLowerCase();
+
             filteredData = globalData.filter(row => {
+                // Filter by Status (activeViewMode)
+                const rowStatus = String(row.status || row.Status || (row.raw && row.raw.Status) || "").trim().toLowerCase();
+                
+                // Special check to help verify if data exists but wording differs
+                if (rowStatus !== currentStatusTarget) return false;
+
                 const matchSearch = globalSearchText === "" ||
-                    String(row["C_Number"] || "").toLowerCase().includes(globalSearchText) ||
-                    String(row["Title"] || "").toLowerCase().includes(globalSearchText) ||
-                    String(row["Customer"] || "").toLowerCase().includes(globalSearchText);
+                    String(row["C_Number"] || (row.raw && row.raw["C_Number"]) || "").toLowerCase().includes(globalSearchText) ||
+                    String(row["Title"] || (row.raw && row.raw["Title"]) || "").toLowerCase().includes(globalSearchText) ||
+                    String(row["Customer"] || (row.raw && row.raw["Customer"]) || "").toLowerCase().includes(globalSearchText);
 
                 return matchSearch &&
-                    (activeFilters["Title"].length === 0 || activeFilters["Title"].includes(row["Title"])) &&
-                    (activeFilters["Customer"].length === 0 || activeFilters["Customer"].includes(row["Customer"])) &&
-                    (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"])) &&
-                    (activeFilters["Meeting Date"].length === 0 || activeFilters["Meeting Date"].includes(row["Meeting Date"]));
+                    (activeFilters["Title"].length === 0 || activeFilters["Title"].includes(row["Title"] || (row.raw && row.raw["Title"]))) &&
+                    (activeFilters["Customer"].length === 0 || activeFilters["Customer"].includes(row["Customer"] || (row.raw && row.raw["Customer"]))) &&
+                    (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"] || (row.raw && row.raw["PL_Name"]))) &&
+                    (activeFilters["Meeting Date"].length === 0 || activeFilters["Meeting Date"].includes(row["Meeting Date"] || (row.raw && row.raw["Meeting Date"])));
             });
 
             renderTable();
@@ -1117,7 +1226,13 @@
             const tbody = document.getElementById("table-body");
             tbody.innerHTML = "";
             // document.getElementById("total-requests").innerText = `Total Requests: ${globalData.length}`;
-            document.getElementById("total-requests").innerText = `Total Requests: ${filteredData.length}`;
+            const tabLabels = {
+                "awaiting meeting": "Awaiting",
+                "cancel": "Cancel",
+                "awaiting techpack": "Complete"
+            };
+            const currentLabel = tabLabels[String(activeViewMode || "").trim().toLowerCase()] || activeViewMode;
+            document.getElementById("total-requests").innerText = `${currentLabel}: ${filteredData.length}`;
 
             if (filteredData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No matching records found.</td></tr>';
