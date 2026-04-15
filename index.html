@@ -240,6 +240,7 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
+        padding: 18px 20px 10px;
     }
 
     .list-header h2 {
@@ -247,18 +248,43 @@
         font-weight: 600;
     }
 
-    .filter-data {
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        cursor: pointer;
+    .list-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
+
+    .header-action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--border-color);
+        background: #fff;
+        color: #475569;
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .header-action-btn i {
+        width: 14px;
+        height: 14px;
+    }
+
+    .header-action-btn:hover {
+        border-color: #cbd5e1;
+        background: #f8fafc;
+    }
+
+    .header-action-btn.export-btn { color: #475569; }
 
     .table-card {
         background: var(--bg-surface);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-top: 1px solid var(--border-color);
         overflow: hidden;
-        box-shadow: var(--shadow-sm);
     }
 
     .data-table {
@@ -268,7 +294,7 @@
     }
 
     .data-table th {
-        background: #f8fafc;
+        background: #ffffff;
         padding: 1rem;
         font-size: 0.7rem;
         font-weight: 600;
@@ -309,12 +335,13 @@
 
     /* Footer */
     .table-footer {
-        padding: 1rem;
+        padding: 0.9rem 1rem 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
         color: var(--text-muted);
         font-size: 0.85rem;
+        border-top: 1px solid var(--border-color);
     }
 
     .pagination {
@@ -325,10 +352,10 @@
     .btn-page {
         background: white;
         border: 1px solid var(--border-color);
-        padding: 4px 12px;
+        padding: 6px 12px;
         border-radius: 6px;
         cursor: pointer;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
 
     .btn-page:disabled {
@@ -485,28 +512,39 @@
     /* Filter */
     /* Filter Bar Styling */
     .filter-bar {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out, margin-bottom 0.3s;
-        background: var(--bg-surface);
-        border-radius: 8px;
-        border: 1px solid transparent;
-        margin-bottom: 0;
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.42);
+        z-index: 1300;
+        align-items: center;
+        justify-content: center;
     }
 
     .filter-bar.active {
-        max-height: 200px;
-        /* Ajustez selon vos besoins */
-        margin-bottom: 1rem;
+        display: flex;
+    }
+
+    .filter-modal-window {
+        width: min(420px, 92vw);
+        background: #fff;
+        border-radius: 8px;
         border: 1px solid var(--border-color);
-        padding: 1rem;
+        box-shadow: var(--shadow-lg);
+        padding: 18px 16px 14px;
+    }
+
+    .filter-modal-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #0f172a;
     }
 
     .filter-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1rem;
-        align-items: flex-end;
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 
     .filter-group {
@@ -516,9 +554,11 @@
     }
 
     .filter-group label {
-        font-size: 0.75rem;
+        font-size: 0.62rem;
         font-weight: 600;
         color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
     }
 
     .filter-group select {
@@ -562,9 +602,9 @@
     .select-input-wrapper input {
         border: none;
         outline: none;
-        padding: 8px 4px;
+        padding: 7px 4px;
         width: 100%;
-        font-size: 0.85rem;
+        font-size: 0.78rem;
     }
 
     .toggle-icon {
@@ -584,7 +624,7 @@
         border-radius: 6px;
         max-height: 200px;
         overflow-y: auto;
-        z-index: 100;
+        z-index: 10;
         box-shadow: var(--shadow-lg);
         display: none;
         /* Caché par défaut */
@@ -593,13 +633,27 @@
 
     .options-dropdown.show {
         display: block;
-        height: 90px;
+        max-height: 120px;
         overflow: scroll;
+    }
+
+    .filter-footer {
+        margin-top: 12px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .filter-footer .btn-primary,
+    .filter-footer .btn-secondary {
+        font-size: 0.75rem;
+        padding: 6px 12px;
     }
 
     .filter-option {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 6px 8px;
         font-size: 0.8rem;
         cursor: pointer;
@@ -610,8 +664,10 @@
         background: var(--primary-light);
     }
 
-    .filter-option input {
-        margin-right: 10px;
+    .filter-option.selected {
+        background: #eaf2ff;
+        color: #1d4ed8;
+        font-weight: 600;
     }
     .hero-stats {
         display: flex;
@@ -660,6 +716,54 @@
         font-weight: 500;
         margin-bottom: 4px;
     }
+
+    .page-shell {
+        margin-bottom: 16px;
+    }
+
+    .page-context-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+    }
+
+    .page-heading {
+        font-size: 34px;
+        line-height: 1.2;
+        margin-bottom: 8px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .page-shell .hero-stats {
+        margin-top: 0;
+    }
+
+    .requests-gallery-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0;
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .queue-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #0f172a;
+        margin: 0;
+    }
+
+    .queue-subtitle {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 4px;
+    }
 </style>
 
 <body>
@@ -694,118 +798,150 @@
 
         <!-- Requests List Container -->
         <section class="requests-list">
-            <div class="list-header" style="align-items: flex-start;">
-                <div class="list-header-content">
-                    <h2 id="table-title">Awaiting Meeting</h2>
-                    <p class="header-subtitle">Techpack</p>
-                    <div class="hero-stats">
-                        <div class="hero-badge hero-badge--awaiting">
-                            <div class="hero-badge-dot emerald"></div>
-                            <span>Awaiting</span>
-                            <strong id="heroBadgeAwaiting">0</strong>
-                        </div>
-                        <div class="hero-badge hero-badge--cancel">
-                            <div class="hero-badge-dot red"></div>
-                            <span>Cancel</span>
-                            <strong id="heroBadgeCancel">0</strong>
-                        </div>
-                        <div class="hero-badge hero-badge--complete">
-                            <div class="hero-badge-dot blue"></div>
-                            <span>Complete</span>
-                            <strong id="heroBadgeComplete">0</strong>
-                        </div>
+            <div class="page-shell">
+                <h2 id="table-title" class="page-heading">Meeting</h2>
+                <div class="hero-stats">
+                    <div class="hero-badge hero-badge--awaiting">
+                        <div class="hero-badge-dot emerald"></div>
+                        <span>Meeting</span>
+                        <strong id="heroBadgeAwaiting">0</strong>
+                    </div>
+                    <div class="hero-badge hero-badge--cancel">
+                        <div class="hero-badge-dot red"></div>
+                        <span>Cancel</span>
+                        <strong id="heroBadgeCancel">0</strong>
+                    </div>
+                    <div class="hero-badge hero-badge--complete">
+                        <div class="hero-badge-dot blue"></div>
+                        <span>Complete</span>
+                        <strong id="heroBadgeComplete">0</strong>
                     </div>
                 </div>
-                <span class="filter-data">Filter Data</span>
             </div>
 
-            <!-- Filter -->
-            <div id="filter-bar" class="filter-bar">
-                <div class="filter-grid">
-                    <div class="filter-group">
-                        <label>Title</label>
-                        <div class="custom-select" id="select-Title">
-                            <div class="select-input-wrapper">
-                                <input type="text" placeholder="Search Title..."
-                                    onkeyup="filterOptions('Title', this.value)">
-                                <i data-feather="chevron-down" class="toggle-icon"
-                                    onclick="toggleDropdown('Title')"></i>
-                            </div>
-                            <div class="options-dropdown" id="dropdown-Title"></div>
-                        </div>
+            <div class="requests-gallery-card">
+                <div class="list-header">
+                    <div class="list-header-content">
+                        <h3 class="queue-title">Upload History &amp; Queue</h3>
+                        <p class="queue-subtitle">Managing current production readiness items</p>
                     </div>
-
-                    <div class="filter-group">
-                        <label>Customer</label>
-                        <div class="custom-select" id="select-Customer">
-                            <div class="select-input-wrapper">
-                                <input type="text" placeholder="Search Customer..."
-                                    onkeyup="filterOptions('Customer', this.value)">
-                                <i data-feather="chevron-down" class="toggle-icon"
-                                    onclick="toggleDropdown('Customer')"></i>
-                            </div>
-                            <div class="options-dropdown" id="dropdown-Customer"></div>
-                        </div>
-                    </div>
-
-                    <div class="filter-group">
-                        <label>Assigned PL</label>
-                        <div class="custom-select" id="select-PL_Name">
-                            <div class="select-input-wrapper">
-                                <input type="text" placeholder="Search PL..."
-                                    onkeyup="filterOptions('PL_Name', this.value)">
-                                <i data-feather="chevron-down" class="toggle-icon"
-                                    onclick="toggleDropdown('PL_Name')"></i>
-                            </div>
-                            <div class="options-dropdown" id="dropdown-PL_Name"></div>
-                        </div>
-                    </div>
-
-                    <div class="filter-group">
-                        <label>Meeting Date</label>
-                        <div class="custom-select" id="select-Meeting_Date">
-                            <div class="select-input-wrapper">
-                                <input type="text" placeholder="Search Date..."
-                                    onkeyup="filterOptions('Meeting Date', this.value)">
-                                <i data-feather="chevron-down" class="toggle-icon"
-                                    onclick="toggleDropdown('Meeting_Date')"></i>
-                            </div>
-                            <div class="options-dropdown" id="dropdown-Meeting_Date"></div>
-                        </div>
+                    <div class="list-header-actions">
+                        <button type="button" class="header-action-btn filter-data">
+                            <i data-feather="filter"></i>
+                            <span>Filter Data</span>
+                        </button>
+                        <button type="button" class="header-action-btn export-btn" id="btn-export-excel">
+                            <i data-feather="download"></i>
+                            <span>Export</span>
+                        </button>
                     </div>
                 </div>
 
-                <div class="filter-footer" style="margin-top: 1.5rem; display: flex; gap: 10px;">
-                    <button class="btn-primary" onclick="applyFilters()">Apply Filters</button>
-                    <button class="btn-secondary" onclick="resetFilters()">Clear All</button>
+                <!-- Advanced Filter Modal -->
+                <div id="filter-bar" class="filter-bar">
+                    <div class="filter-modal-window">
+                        <h3 class="filter-modal-title">Advanced Filter</h3>
+                        <div class="filter-grid">
+                            <div class="filter-group">
+                                <label>Request ID</label>
+                                <div class="custom-select" id="select-C_Number">
+                                    <div class="select-input-wrapper" onclick="openDropdown('C_Number')">
+                                        <input type="text" placeholder="Search or select ID..."
+                                            onkeyup="filterOptions('C_Number', this.value)">
+                                        <i data-feather="chevron-down" class="toggle-icon"
+                                            onclick="openDropdown('C_Number')"></i>
+                                    </div>
+                                    <div class="options-dropdown" id="dropdown-C_Number"></div>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>Style Name</label>
+                                <div class="custom-select" id="select-Title">
+                                    <div class="select-input-wrapper" onclick="openDropdown('Title')">
+                                        <input type="text" placeholder="Search or select Style..."
+                                            onkeyup="filterOptions('Title', this.value)">
+                                        <i data-feather="chevron-down" class="toggle-icon"
+                                            onclick="openDropdown('Title')"></i>
+                                    </div>
+                                    <div class="options-dropdown" id="dropdown-Title"></div>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>Customer</label>
+                                <div class="custom-select" id="select-Customer">
+                                    <div class="select-input-wrapper" onclick="openDropdown('Customer')">
+                                        <input type="text" placeholder="Search or select Customer..."
+                                            onkeyup="filterOptions('Customer', this.value)">
+                                        <i data-feather="chevron-down" class="toggle-icon"
+                                            onclick="openDropdown('Customer')"></i>
+                                    </div>
+                                    <div class="options-dropdown" id="dropdown-Customer"></div>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>PL Name / PM Name</label>
+                                <div class="custom-select" id="select-PL_Name">
+                                    <div class="select-input-wrapper" onclick="openDropdown('PL_Name')">
+                                        <input type="text" placeholder="Search or select PL..."
+                                            onkeyup="filterOptions('PL_Name', this.value)">
+                                        <i data-feather="chevron-down" class="toggle-icon"
+                                            onclick="openDropdown('PL_Name')"></i>
+                                    </div>
+                                    <div class="options-dropdown" id="dropdown-PL_Name"></div>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>Status</label>
+                                <div class="custom-select" id="select-Status">
+                                    <div class="select-input-wrapper" onclick="openDropdown('Status')">
+                                        <input type="text" placeholder="Search or select Status..."
+                                            onkeyup="filterOptions('Status', this.value)">
+                                        <i data-feather="chevron-down" class="toggle-icon"
+                                            onclick="openDropdown('Status')"></i>
+                                    </div>
+                                    <div class="options-dropdown" id="dropdown-Status"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-footer">
+                            <button class="btn-secondary" type="button" id="btn-filter-cancel">Cancel</button>
+                            <button class="btn-secondary" type="button" onclick="resetFilters()">Clear Filters</button>
+                            <button class="btn-primary" type="button" onclick="applyFilters(); closeFilterModal();">Apply Filters</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="table-card">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Request ID</th>
-                            <th>Title</th>
-                            <th>Customer</th>
-                            <th>Assigned PL</th>
-                            <th>Costing_RD</th>
-                            <th>Status</th>
-                            <th>Meeting Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <!-- Filled by JS -->
-                        <tr>
-                            <td colspan="8" style="text-align:center;">Loading data...</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="table-footer">
-                    <span id="total-requests">Total Requests: 0</span>
-                    <div class="pagination">
-                        <button class="btn-page" disabled>Previous</button>
-                        <button class="btn-page" disabled>Next</button>
+                <div class="table-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Title</th>
+                                <th>Customer</th>
+                                <th>Assigned PL</th>
+                                <th>Costing_RD</th>
+                                <th>Status</th>
+                                <th>Meeting Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Filled by JS -->
+                            <tr>
+                                <td colspan="8" style="text-align:center;">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="table-footer">
+                        <span id="total-requests">Total Requests: 0</span>
+                        <div class="pagination">
+                            <button class="btn-page" disabled>Previous</button>
+                            <button class="btn-page" disabled>Next</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -883,7 +1019,7 @@
                     <!-- Pre-Process Toggle State -->
                     <div id="process-toggle-group" style="display: flex; gap: 8px;">
                         <button type="button" class="btn-primary" id="btn-process-toggle"
-                            onclick="toggleProcessMenu()">Process</button>
+                            onclick="toggleProcessMenu()">Proceed</button>
                         <button type="button" class="btn-secondary" id="btn-close-main"
                             onclick="closeModal()">Close</button>
                     </div>
@@ -927,10 +1063,11 @@
         let activeViewMode = "Awaiting Meeting";
         let globalSearchText = "";
         let activeFilters = {
+            "C_Number": [],
             "Title": [],
             "Customer": [],
             "PL_Name": [],
-            "Meeting Date": []
+            "Status": []
         };
 
         const DETAIL_FIELDS = [
@@ -950,18 +1087,34 @@
             });
 
             document.getElementById("modal-close").addEventListener("click", closeModal);
-            // Toggle Filter Bar
             const filterBtn = document.querySelector(".filter-data");
-            filterBtn.addEventListener("click", () => {
-                const bar = document.getElementById("filter-bar");
-                bar.classList.toggle("active");
+            const filterBar = document.getElementById("filter-bar");
+            filterBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                filterBar.classList.add("active");
+            });
+            if (filterBar) {
+                filterBar.addEventListener("click", (e) => {
+                    if (e.target === filterBar) closeFilterModal();
+                });
+            }
+            const filterModalWindow = document.querySelector(".filter-modal-window");
+            if (filterModalWindow) {
+                filterModalWindow.addEventListener("click", (e) => e.stopPropagation());
+            }
+            const filterCancelBtn = document.getElementById("btn-filter-cancel");
+            if (filterCancelBtn) filterCancelBtn.addEventListener("click", closeFilterModal);
+
+            document.addEventListener("click", (event) => {
+                if (!event.target.closest('.custom-select')) {
+                    document.querySelectorAll('.options-dropdown').forEach(d => d.classList.remove('show'));
+                }
             });
 
-            // Listeners pour les filtres
-            ['filter-title', 'filter-customer', 'filter-pl', 'filter-date'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('change', applyFilters);
-            });
+            const exportBtn = document.getElementById("btn-export-excel");
+            if (exportBtn) {
+                exportBtn.addEventListener("click", exportFilteredToExcel);
+            }
 
             // Navbar listeners
             document.getElementById("nav-awaiting-meeting").addEventListener("click", (e) => { e.preventDefault(); document.querySelector('.requests-list').style.display = 'block'; document.getElementById('calendar-section').style.display = 'none'; fetchData("Awaiting Meeting", e.target); });
@@ -1025,13 +1178,23 @@
             if (document.getElementById("heroBadgeComplete")) document.getElementById("heroBadgeComplete").innerText = completeCount;
         }
 
+        function getStatusDisplayLabel(statusValue) {
+            const statusMap = {
+                "awaiting meeting": "Meeting",
+                "cancel": "Cancel",
+                "awaiting techpack": "Complete"
+            };
+            const normalized = String(statusValue || "").trim().toLowerCase();
+            return statusMap[normalized] || statusValue;
+        }
+
         async function fetchData(statusFilter = 'Awaiting Meeting', targetElement = null) {
             // Update UI State
             activeViewMode = statusFilter;
             const target = targetElement || document.getElementById("nav-awaiting-meeting");
             document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active-nav"));
             if (target) target.classList.add("active-nav");
-            document.getElementById("table-title").innerText = statusFilter;
+            document.getElementById("table-title").innerText = getStatusDisplayLabel(statusFilter);
 
             document.getElementById("table-body").innerHTML = '<tr><td colspan="8" style="text-align:center;">Loading data from database...</td></tr>';
 
@@ -1073,84 +1236,80 @@
             dropdown.classList.toggle('show');
         }
 
-        function populateFilterOptions() {
-            const fields = ["Title", "Customer", "PL_Name", "Meeting Date"];
-
-            fields.forEach(field => {
-                // On cible le container (en remplaçant l'espace par _ pour l'ID HTML)
-                const containerId = `container-${field.replace(' ', '_')}`;
-                const container = document.getElementById(containerId);
-                if (!container) return;
-
-                // Extraire les valeurs uniques
-                const uniqueValues = [...new Set(globalData.map(item => item[field]))]
-                    .filter(val => val && val !== "")
-                    .sort();
-
-                container.innerHTML = ""; // Vider le container
-
-                uniqueValues.forEach(val => {
-                    const label = document.createElement('label');
-                    label.className = "filter-option";
-
-                    // Création de la checkbox
-                    const checkbox = document.createElement('input');
-                    checkbox.type = "checkbox";
-                    checkbox.value = val;
-                    checkbox.dataset.field = field;
-
-                    // Listener pour mettre à jour les filtres actifs
-                    checkbox.addEventListener('change', (e) => {
-                        const f = e.target.dataset.field;
-                        const v = e.target.value;
-                        if (e.target.checked) {
-                            activeFilters[f].push(v);
-                        } else {
-                            activeFilters[f] = activeFilters[f].filter(item => item !== v);
-                        }
-                        // Optionnel: filtrer en temps réel au clic
-                        // applyFilters(); 
-                    });
-
-                    label.appendChild(checkbox);
-                    label.append(val);
-                    container.appendChild(label);
-                });
+        function openDropdown(fieldId) {
+            const dropdown = document.getElementById(`dropdown-${fieldId.replace(' ', '_')}`);
+            document.querySelectorAll('.options-dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.remove('show');
             });
+            if (dropdown) dropdown.classList.add('show');
         }
+
+        function getFilterInput(field) {
+            const container = document.getElementById(`select-${field.replace(' ', '_')}`);
+            return container ? container.querySelector('.select-input-wrapper input') : null;
+        }
+
+        function syncFilterFieldDisplay(field) {
+            const input = getFilterInput(field);
+            if (!input) return;
+            const selections = activeFilters[field] || [];
+            if (selections.length === 0) {
+                input.value = "";
+                input.title = "";
+                return;
+            }
+            input.value = selections.join(", ");
+            input.title = selections.join(", ");
+        }
+
+        function syncAllFilterFieldDisplays() {
+            Object.keys(activeFilters).forEach(syncFilterFieldDisplay);
+        }
+
         function populateFilterOptions() {
-            const fields = ["Title", "Customer", "PL_Name", "Meeting Date"];
+            const fields = ["C_Number", "Title", "Customer", "PL_Name", "Status"];
             fields.forEach(field => {
                 const containerId = `dropdown-${field.replace(' ', '_')}`;
                 const container = document.getElementById(containerId);
-                const uniqueValues = [...new Set(globalData.map(item => item[field]))]
-                    .filter(val => val)
+                if (!container) return;
+                const uniqueValues = [...new Set(globalData.map(item => item[field] ?? (item.raw && item.raw[field])))]
+                    .filter(val => val !== undefined && val !== null && String(val).trim() !== "")
+                    .map(val => String(val).trim())
                     .sort();
 
                 container.innerHTML = "";
                 uniqueValues.forEach(val => {
+                    const isSelected = activeFilters[field].includes(val);
                     const label = document.createElement('label');
-                    label.className = "filter-option";
+                    label.className = `filter-option ${isSelected ? "selected" : ""}`;
                     label.innerHTML = `
-                <input type="checkbox" value="${val}" data-field="${field}" 
-                ${activeFilters[field].includes(val) ? 'checked' : ''} 
-                onchange="handleCheck(this)">
                 <span>${val}</span>
             `;
+                    label.dataset.field = field;
+                    label.dataset.value = val;
+                    label.onclick = () => handleOptionSelect(field, val);
                     container.appendChild(label);
                 });
             });
             initIcons();
+            syncAllFilterFieldDisplays();
         }
 
-        function handleCheck(checkbox) {
-            const field = checkbox.dataset.field;
-            const val = checkbox.value;
-            if (checkbox.checked) {
-                if (!activeFilters[field].includes(val)) activeFilters[field].push(val);
-            } else {
+        function closeFilterModal() {
+            const bar = document.getElementById("filter-bar");
+            if (bar) bar.classList.remove("active");
+            document.querySelectorAll('.options-dropdown').forEach(d => d.classList.remove('show'));
+        }
+
+        function handleOptionSelect(field, val) {
+            if (activeFilters[field].includes(val)) {
                 activeFilters[field] = activeFilters[field].filter(v => v !== val);
+            } else {
+                activeFilters[field].push(val);
             }
+            syncFilterFieldDisplay(field);
+            populateFilterOptions();
+            openDropdown(field);
         }
 
         function filterOptions(field, text) {
@@ -1172,22 +1331,17 @@
             });
         }
 
-        // Fermer les dropdowns si on clique ailleurs
-        window.onclick = function (event) {
-            if (!event.target.closest('.custom-select')) {
-                document.querySelectorAll('.options-dropdown').forEach(d => d.classList.remove('show'));
-            }
-        }
-
         function applyFilters() {
             const currentStatusTarget = String(activeViewMode || "").trim().toLowerCase();
+            const selectedStatuses = (activeFilters["Status"] || []).map(s => String(s).trim().toLowerCase());
 
             filteredData = globalData.filter(row => {
                 // Filter by Status (activeViewMode)
                 const rowStatus = String(row.status || row.Status || (row.raw && row.raw.Status) || "").trim().toLowerCase();
-                
-                // Special check to help verify if data exists but wording differs
-                if (rowStatus !== currentStatusTarget) return false;
+                const statusMatched = selectedStatuses.length > 0
+                    ? selectedStatuses.includes(rowStatus)
+                    : rowStatus === currentStatusTarget;
+                if (!statusMatched) return false;
 
                 const matchSearch = globalSearchText === "" ||
                     String(row["C_Number"] || (row.raw && row.raw["C_Number"]) || "").toLowerCase().includes(globalSearchText) ||
@@ -1195,29 +1349,30 @@
                     String(row["Customer"] || (row.raw && row.raw["Customer"]) || "").toLowerCase().includes(globalSearchText);
 
                 return matchSearch &&
+                    (activeFilters["C_Number"].length === 0 || activeFilters["C_Number"].includes(row["C_Number"] || (row.raw && row.raw["C_Number"]))) &&
                     (activeFilters["Title"].length === 0 || activeFilters["Title"].includes(row["Title"] || (row.raw && row.raw["Title"]))) &&
                     (activeFilters["Customer"].length === 0 || activeFilters["Customer"].includes(row["Customer"] || (row.raw && row.raw["Customer"]))) &&
-                    (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"] || (row.raw && row.raw["PL_Name"]))) &&
-                    (activeFilters["Meeting Date"].length === 0 || activeFilters["Meeting Date"].includes(row["Meeting Date"] || (row.raw && row.raw["Meeting Date"])));
+                    (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"] || (row.raw && row.raw["PL_Name"])));
             });
 
             renderTable();
         }
 
         function resetFilters() {
-            // Décocher toutes les cases
-            document.querySelectorAll('.multi-select-container input').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.select-input-wrapper input[type="text"]').forEach(input => input.value = "");
+            document.querySelectorAll('.filter-option').forEach(opt => opt.style.display = "flex");
 
             // Réinitialiser l'objet des filtres
             activeFilters = {
+                "C_Number": [],
                 "Title": [],
                 "Customer": [],
                 "PL_Name": [],
-                "Meeting Date": []
+                "Status": []
             };
 
-            filteredData = [...globalData];
-            renderTable();
+            syncAllFilterFieldDisplays();
+            applyFilters();
         }
 
 
@@ -1225,14 +1380,7 @@
         function renderTable() {
             const tbody = document.getElementById("table-body");
             tbody.innerHTML = "";
-            // document.getElementById("total-requests").innerText = `Total Requests: ${globalData.length}`;
-            const tabLabels = {
-                "awaiting meeting": "Awaiting",
-                "cancel": "Cancel",
-                "awaiting techpack": "Complete"
-            };
-            const currentLabel = tabLabels[String(activeViewMode || "").trim().toLowerCase()] || activeViewMode;
-            document.getElementById("total-requests").innerText = `${currentLabel}: ${filteredData.length}`;
+            document.getElementById("total-requests").innerText = `Total Requests: ${filteredData.length}`;
 
             if (filteredData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No matching records found.</td></tr>';
@@ -1289,6 +1437,56 @@
         `;
                 tbody.appendChild(tr);
             });
+        }
+
+        function exportFilteredToExcel() {
+            if (!Array.isArray(filteredData) || filteredData.length === 0) {
+                alert("No records to export.");
+                return;
+            }
+
+            const columns = [
+                { key: "C_Number", label: "Request ID" },
+                { key: "Title", label: "Title" },
+                { key: "Customer", label: "Customer" },
+                { key: "PL_Name", label: "Assigned PL" },
+                { key: "Costing Ready Date", label: "Costing_RD" },
+                { key: "Status", label: "Status" },
+                { key: "Meeting Date", label: "Meeting Date" }
+            ];
+
+            const escapeCsv = (value) => {
+                const text = String(value ?? "");
+                if (text.includes(",") || text.includes('"') || text.includes("\n") || text.includes("\r")) {
+                    return `"${text.replace(/"/g, '""')}"`;
+                }
+                return text;
+            };
+
+            const headerRow = columns.map((col) => escapeCsv(col.label)).join(",");
+            const dataRows = filteredData.map((row) =>
+                columns
+                    .map((col) => {
+                        const cellValue = row[col.key] ?? (row.raw && row.raw[col.key]) ?? "";
+                        return escapeCsv(cellValue);
+                    })
+                    .join(",")
+            );
+            const csvContent = [headerRow, ...dataRows].join("\r\n");
+
+            const statusLabel = getStatusDisplayLabel(activeViewMode).replace(/\s+/g, "_");
+            const timestamp = new Date().toISOString().slice(0, 10);
+            const fileName = `Meeting_${statusLabel}_${timestamp}.csv`;
+
+            const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
 
         function openModalById(c_num) {
