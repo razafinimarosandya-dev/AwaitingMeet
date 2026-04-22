@@ -1142,10 +1142,13 @@
                         </tbody>
                     </table>
                     <div class="table-footer">
-                        <span id="total-requests">Total Requests: 0</span>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <span id="total-requests">Total Requests: 0</span>
+                            <span id="page-info" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Page 1 of 1</span>
+                        </div>
                         <div class="pagination">
-                            <button class="btn-page" disabled>Previous</button>
-                            <button class="btn-page" disabled>Next</button>
+                            <button class="btn-page" id="btn-prev-page" disabled>Previous</button>
+                            <button class="btn-page" id="btn-next-page" disabled>Next</button>
                         </div>
                     </div>
                 </div>
@@ -1282,8 +1285,10 @@
 
         let globalData = [];
         let filteredData = [];
-        let activeViewMode = "Awaiting Meeting";
-        let globalSearchText = "";
+        let activeViewMode = 'Awaiting Meeting';
+        let detailFieldsForTable = [];
+        let currentPage = 1;
+        const rowsPerPage = 10;
         let activeFilters = {
             "C_Number": [],
             "Customer_Ref": [],
@@ -1312,6 +1317,28 @@
         document.addEventListener("DOMContentLoaded", () => {
             setupUserSession();
             fetchData();
+
+            // Pagination listeners
+            const btnPrev = document.getElementById("btn-prev-page");
+            const btnNext = document.getElementById("btn-next-page");
+
+            if (btnPrev) {
+                btnPrev.addEventListener("click", () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderTable();
+                    }
+                });
+            }
+            if (btnNext) {
+                btnNext.addEventListener("click", () => {
+                    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        renderTable();
+                    }
+                });
+            }
 
             // Search event
             const searchInput = document.getElementById("global-search");
@@ -1624,6 +1651,7 @@
         }
 
         function applyFilters() {
+            currentPage = 1; // Reset to page 1 on filter
             const currentStatusTarget = String(activeViewMode || "").trim().toLowerCase();
             const selectedStatuses = (activeFilters["Status"] || []).map(s => String(s).trim().toLowerCase());
 
@@ -1671,21 +1699,41 @@
 
         function renderTable() {
             const tbody = document.getElementById("table-body");
+            const btnPrev = document.getElementById("btn-prev-page");
+            const btnNext = document.getElementById("btn-next-page");
+            const pageInfo = document.getElementById("page-info");
+            
             tbody.innerHTML = "";
             document.getElementById("total-requests").innerText = `Total Requests: ${filteredData.length}`;
 
             if (filteredData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No matching records found.</td></tr>';
+                if (btnPrev) btnPrev.disabled = true;
+                if (btnNext) btnNext.disabled = true;
+                if (pageInfo) pageInfo.innerText = "Page 1 of 1";
                 return;
             }
-            // globalData.forEach(row => {
+
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+
+            // Slice data for pagination
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const pageData = filteredData.slice(start, end);
+
+            // Update UI components
+            if (btnPrev) btnPrev.disabled = (currentPage === 1);
+            if (btnNext) btnNext.disabled = (currentPage === totalPages);
+            if (pageInfo) pageInfo.innerText = `Page ${currentPage} of ${totalPages}`;
+
             const formatDate = (dateStr) => {
                 if (!dateStr || String(dateStr).trim() === '-' || String(dateStr).trim() === '') return '';
                 const d = new Date(dateStr);
                 return isNaN(d) ? dateStr : d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
             };
 
-            filteredData.forEach(row => {
+            pageData.forEach(row => {
                 const tr = document.createElement("tr");
 
                 let assigneesHtml = '';
