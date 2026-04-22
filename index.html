@@ -428,8 +428,8 @@
 
     .modal-window {
         background: white;
-        width: 500px;
-        max-width: 90%;
+        width: 920px;
+        max-width: 96vw;
         max-height: 90vh;
         border-radius: 8px;
         display: flex;
@@ -507,6 +507,121 @@
         border: 1px solid #cbd5e1;
         border-radius: 4px;
         text-align: right;
+    }
+
+    .fabric-table-wrap {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        margin-bottom: 14px;
+        overflow: hidden;
+        background: #ffffff;
+    }
+
+    .fabric-table-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 10px;
+        border-bottom: 1px solid #e2e8f0;
+        background: #f8fafc;
+    }
+
+    .fabric-table-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #334155;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .fabric-col-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    .fabric-col-btn {
+        border: 1px solid #cbd5e1;
+        background: #ffffff;
+        color: #334155;
+        border-radius: 6px;
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    .fabric-col-btn:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+
+    .fabric-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .fabric-table th,
+    .fabric-table td {
+        border-right: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 8px 10px;
+        font-size: 0.82rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .fabric-table th:last-child,
+    .fabric-table td:last-child {
+        border-right: none;
+    }
+
+    .fabric-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .fabric-table th {
+        background: #f8fafc;
+        color: #475569;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.02em;
+        font-weight: 700;
+    }
+
+    .fabric-opt-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        height: 24px;
+        padding: 0 8px;
+        border-radius: 999px;
+        background: #e2e8f0;
+        color: #334155;
+        font-size: 0.76rem;
+        font-weight: 700;
+    }
+
+    .fabric-cell-input,
+    .fabric-cell-select {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 6px 8px;
+        font-size: 0.8rem;
+        background: #fff;
+    }
+
+    .fabric-cell-input:disabled,
+    .fabric-cell-select:disabled {
+        background: #f8fafc;
+        color: #64748b;
+        cursor: not-allowed;
     }
 
     /* Filter */
@@ -775,7 +890,7 @@
             </div>
             <div class="search-bar">
                 <i data-feather="search"></i>
-                <input type="text" id="global-search" placeholder="Search Request ID or Custom or Title">
+                <input type="text" id="global-search" placeholder="Search C Number, Customer, or Customer Reference">
             </div>
             <div class="nav-links">
                 <a href="https://costing-home.vercel.app/">Home</a>
@@ -843,7 +958,7 @@
                         <h3 class="filter-modal-title">Advanced Filter</h3>
                         <div class="filter-grid">
                             <div class="filter-group">
-                                <label>Request ID</label>
+                                <label>C Number</label>
                                 <div class="custom-select" id="select-C_Number">
                                     <div class="select-input-wrapper" onclick="openDropdown('C_Number')">
                                         <input type="text" placeholder="Search or select ID..."
@@ -856,10 +971,10 @@
                             </div>
 
                             <div class="filter-group">
-                                <label>Style Name</label>
+                                <label>Customer Reference</label>
                                 <div class="custom-select" id="select-Title">
                                     <div class="select-input-wrapper" onclick="openDropdown('Title')">
-                                        <input type="text" placeholder="Search or select Style..."
+                                        <input type="text" placeholder="Search or select Customer Reference..."
                                             onkeyup="filterOptions('Title', this.value)">
                                         <i data-feather="chevron-down" class="toggle-icon"
                                             onclick="openDropdown('Title')"></i>
@@ -882,7 +997,7 @@
                             </div>
 
                             <div class="filter-group">
-                                <label>PL Name / PM Name</label>
+                                <label>PL Name</label>
                                 <div class="custom-select" id="select-PL_Name">
                                     <div class="select-input-wrapper" onclick="openDropdown('PL_Name')">
                                         <input type="text" placeholder="Search or select PL..."
@@ -919,11 +1034,11 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Request ID</th>
-                                <th>Title</th>
+                                <th>C Number</th>
+                                <th>Customer Reference</th>
                                 <th>Customer</th>
-                                <th>Assigned PL</th>
-                                <th>Costing_RD</th>
+                                <th>PL Name</th>
+                                <th>Costing Expected Date</th>
                                 <th>Status</th>
                                 <th>Meeting Date</th>
                                 <th>Action</th>
@@ -1000,6 +1115,23 @@
             <div class="modal-body">
                 <form id="edit-form">
                     <input type="hidden" id="edit-row-index">
+                    <div class="fabric-table-wrap" id="fabric-table-wrap">
+                        <div class="fabric-table-toolbar">
+                            <span class="fabric-table-title">Fabric Details</span>
+                            <div class="fabric-col-actions">
+                                <button type="button" class="fabric-col-btn" id="fabric-remove-col-btn"
+                                    title="Remove option" onclick="removeFabricColumn()">-</button>
+                                <button type="button" class="fabric-col-btn" id="fabric-add-col-btn"
+                                    title="Add option" onclick="addFabricColumn()">+</button>
+                            </div>
+                        </div>
+                        <table class="fabric-table">
+                            <thead>
+                                <tr id="fabric-table-head"></tr>
+                            </thead>
+                            <tbody id="fabric-table-body"></tbody>
+                        </table>
+                    </div>
                     <div class="form-list" id="modal-details-list">
                         <!-- Details injected here -->
                     </div>
@@ -1056,7 +1188,7 @@
 
     <script>
         feather.replace();
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzSdyx3uNKZPhbhwg_eIc_VmRTvUNF8-Q5z9hunbr7seSuz2nNdO-awDI8qserEQHkr/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZ4f9sdtoTb2Ps0E5Q8NX1FV7qhfJXEx-AzazDqZLfsnkfKhV3xqEMBPVGdTYuWh8TSg/exec";
 
         let globalData = [];
         let filteredData = [];
@@ -1071,10 +1203,21 @@
         };
 
         const DETAIL_FIELDS = [
-            "C_Number", "Title", "Customer", "Customer Department", "TKL Season",
-            "Main Fabric", "Fabric Header", "PL_Name", "Status",
-            "Requested_Date", "Created By", "Remarks", "Folder Path"
+            "C_Number", "Customer_Ref", "Customer", "Customer_Department", "Season",
+            "PL_Name", "Acc_Name", "Status",
+            "Req_Date", "Created By", "Req_Remarks", "Attachments"
         ];
+        const FABRIC_TABLE_COLUMNS = [
+            { key: "opt", label: "OPT", aliases: ["Opt", "OPT", "Option"] },
+            { key: "type", label: "Type", aliases: ["Type", "Fabric Type"] },
+            { key: "fabric", label: "Fabric", aliases: ["Fabric", "Main Fabric", "Main_Fabric"] },
+            { key: "gms", label: "GMS", aliases: ["GMS", "Gsm", "GSM"] },
+            { key: "composition", label: "Composition", aliases: ["Composition", "Comp"] },
+            { key: "width", label: "Width", aliases: ["Width", "Fabric Width"] },
+            { key: "header", label: "Header", aliases: ["Header", "Fabric Header", "Fabric_Header"] }
+        ];
+        const FABRIC_OPT_LABELS = ["A", "B", "C", "D", "E", "F", "G"];
+        let visibleFabricRows = [];
 
         document.addEventListener("DOMContentLoaded", () => {
             fetchData();
@@ -1267,7 +1410,7 @@
         }
 
         function populateFilterOptions() {
-            const fields = ["C_Number", "Title", "Customer", "PL_Name", "Status"];
+            const fields = ["C_Number", "Customer_Ref", "Customer", "PL_Name", "Status"];
             fields.forEach(field => {
                 const containerId = `dropdown-${field.replace(' ', '_')}`;
                 const container = document.getElementById(containerId);
@@ -1345,12 +1488,12 @@
 
                 const matchSearch = globalSearchText === "" ||
                     String(row["C_Number"] || (row.raw && row.raw["C_Number"]) || "").toLowerCase().includes(globalSearchText) ||
-                    String(row["Title"] || (row.raw && row.raw["Title"]) || "").toLowerCase().includes(globalSearchText) ||
+                    String(row["Customer_Ref"] || (row.raw && row.raw["Customer_Ref"]) || "").toLowerCase().includes(globalSearchText) ||
                     String(row["Customer"] || (row.raw && row.raw["Customer"]) || "").toLowerCase().includes(globalSearchText);
 
                 return matchSearch &&
                     (activeFilters["C_Number"].length === 0 || activeFilters["C_Number"].includes(row["C_Number"] || (row.raw && row.raw["C_Number"]))) &&
-                    (activeFilters["Title"].length === 0 || activeFilters["Title"].includes(row["Title"] || (row.raw && row.raw["Title"]))) &&
+                    (activeFilters["Customer_Ref"].length === 0 || activeFilters["Customer_Ref"].includes(row["Customer_Ref"] || (row.raw && row.raw["Customer_Ref"]))) &&
                     (activeFilters["Customer"].length === 0 || activeFilters["Customer"].includes(row["Customer"] || (row.raw && row.raw["Customer"]))) &&
                     (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"] || (row.raw && row.raw["PL_Name"])));
             });
@@ -1365,7 +1508,7 @@
             // Réinitialiser l'objet des filtres
             activeFilters = {
                 "C_Number": [],
-                "Title": [],
+                "Customer_Ref": [],
                 "Customer": [],
                 "PL_Name": [],
                 "Status": []
@@ -1402,7 +1545,7 @@
 
                 let limit = 3;
                 let fullNames = assigneeList.join(', ');
-                assigneesHtml += `<div style="display:flex; flex-direction:column; gap:4px;" title="All Assigned PLs:\n${fullNames.replace(/, /g, '\n')}">`;
+                assigneesHtml += `<div style="display:flex; flex-direction:column; gap:4px;" title="All PL Names:\n${fullNames.replace(/, /g, '\n')}">`;
                 for (let i = 0; i < assigneeList.length; i++) {
                     if (i < limit) {
                         let name = assigneeList[i];
@@ -1424,13 +1567,13 @@
                 }
                 assigneesHtml += `</div>`;
 
-                // Columns: Request ID, Title(Style), Customer, Assigned PL, Costing_RD, Status, Meeting Date, Action
+                // Columns: C Number, Customer Reference, Customer, PL Name, Costing Expected Date, Status, Meeting Date, Action
                 tr.innerHTML = `
             <td><a class="req-id-link" onclick='openModalById("${row["C_Number"]}")'>${row["C_Number"] || ''}</a></td>
-            <td>${row["Title"] || ''}</td>
+            <td>${row["Customer_Ref"] || ''}</td>
             <td>${row["Customer"] || ''}</td>
             <td>${assigneesHtml}</td>
-            <td>${formatDate(row["Costing Ready Date"])}</td>
+            <td>${formatDate(row["Costing_Expected_Date"])}</td>
             <td><span class="status-pill">${row["Status"] || ''}</span></td>
             <td>${formatDate(row["Meeting Date"])}</td>
             <td><button class="btn-outline-blue btn-sm" onclick='openModalById("${row["C_Number"]}")' style="padding:4px 8px;font-size:0.8rem;">Details</button></td>
@@ -1446,11 +1589,11 @@
             }
 
             const columns = [
-                { key: "C_Number", label: "Request ID" },
-                { key: "Title", label: "Title" },
+                { key: "C_Number", label: "C Number" },
+                { key: "Customer_Ref", label: "Customer Reference" },
                 { key: "Customer", label: "Customer" },
-                { key: "PL_Name", label: "Assigned PL" },
-                { key: "Costing Ready Date", label: "Costing_RD" },
+                { key: "PL_Name", label: "PL Name" },
+                { key: "Costing_Expected_Date", label: "Costing Expected Date" },
                 { key: "Status", label: "Status" },
                 { key: "Meeting Date", label: "Meeting Date" }
             ];
@@ -1497,6 +1640,8 @@
         function openModal(row) {
             currentModalRow = row;
             document.getElementById("edit-row-index").value = row._rowIndex;
+            isEditing = false;
+            renderFabricTable(row);
 
             const list = document.getElementById("modal-details-list");
             list.innerHTML = "";
@@ -1505,17 +1650,27 @@
                 const div = document.createElement('div');
                 div.className = "detail-row";
 
-                let labelName = field === "C_Number" ? "Request ID" : field;
+                let labelName = field === "C_Number" ? "C Number" : field;
+                if (field === "Customer_Ref") labelName = "Customer Reference";
                 if (field === "PL_Name") labelName = "PL Name";
-                if (field === "Customer Department") labelName = "Cus Dept";
-                if (field === "Requested_Date") labelName = "Created";
+                if (field === "Acc_Name") labelName = "Acc Name";
+                if (field === "Customer_Department") labelName = "Cus Dept";
+                if (field === "Req_Date") labelName = "Created";
 
                 let val = row[field];
+                if (field === "Acc_Name") {
+                    val = row["Acc_Name"]
+                        || row["Acc Name"]
+                        || row["ACC Name"]
+                        || row["ACC_Name"]
+                        || row["acc_name"]
+                        || row["ACC"];
+                }
                 if (val === undefined || val === "") val = "N/A";
 
                 let displayVal = val;
                 // Format Created date exactly to DD/MM/YYYY
-                if (field === "Requested_Date" && val !== "N/A") {
+                if (field === "Req_Date" && val !== "N/A") {
                     let d = null;
                     if (val instanceof Date) {
                         d = val;
@@ -1531,7 +1686,7 @@
                     }
                 }
 
-                if (field === "Folder Path" && val !== "N/A") {
+                if (field === "Attachments" && val !== "N/A" && String(val).startsWith("http")) {
                     displayVal = `<a href="${val}" target="_blank" style="color:#3b82f6;">Open Folder</a>`;
                 }
 
@@ -1556,6 +1711,190 @@
             }
         }
 
+        function getRowValueByAliases(row, aliases) {
+            if (!row) return "N/A";
+            for (const alias of aliases) {
+                const direct = row[alias];
+                if (direct !== undefined && direct !== null && String(direct).trim() !== "") {
+                    return String(direct).trim();
+                }
+                if (row.raw) {
+                    const nested = row.raw[alias];
+                    if (nested !== undefined && nested !== null && String(nested).trim() !== "") {
+                        return String(nested).trim();
+                    }
+                }
+            }
+
+            const allEntries = Object.entries({ ...(row.raw || {}), ...row });
+            for (const alias of aliases) {
+                const target = String(alias || "").toLowerCase().replace(/[\s_]/g, "");
+                const found = allEntries.find(([k, v]) =>
+                    String(k || "").toLowerCase().replace(/[\s_]/g, "") === target &&
+                    v !== undefined && v !== null && String(v).trim() !== ""
+                );
+                if (found) return String(found[1]).trim();
+            }
+            return "N/A";
+        }
+
+        function splitFabricCellValue(value) {
+            const text = String(value || "").trim();
+            if (!text || text === "N/A") return [];
+            if (text.includes("\n")) {
+                return text.split(/\r?\n/).map(v => v.trim()).filter(Boolean);
+            }
+            return [text];
+        }
+
+        function buildFabricRowsFromRow(row) {
+            const supplierType = String(getRowValueByAliases(row, ["Fabric Supplier", "Fabric_Supplier", "Type", "Fabric Type"]) || "")
+                .trim()
+                .toUpperCase();
+            const rawAddOns = row?.["Fabric Add Ons"] || row?.["Fabric AddOns"] || row?.["Fabric_Add_Ons"] || row?.raw?.["Fabric Add Ons"] || "";
+            if (rawAddOns) {
+                try {
+                    const parsed = JSON.parse(rawAddOns);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        return parsed.slice(0, FABRIC_OPT_LABELS.length).map((item, index) => ({
+                            opt: FABRIC_OPT_LABELS[index],
+                            type: String(item?.type || supplierType || "").trim().toUpperCase(),
+                            fabric: String(item?.fabric || "").trim(),
+                            gms: String(item?.gms || "").trim(),
+                            composition: String(item?.composition || "").trim(),
+                            width: String(item?.width || "").trim(),
+                            header: String(item?.header || "").trim()
+                        }));
+                    }
+                } catch (e) {
+                    // Fallback to legacy flat columns when JSON cannot be parsed.
+                }
+            }
+
+            const typeVals = splitFabricCellValue(getRowValueByAliases(row, ["Fabric Supplier", "Fabric_Supplier", "Type", "Fabric Type"])).map(v => String(v).toUpperCase());
+            const fabricVals = splitFabricCellValue(getRowValueByAliases(row, ["Fabric", "Main Fabric", "Main_Fabric"]));
+            const gmsVals = splitFabricCellValue(getRowValueByAliases(row, ["GMS", "Gsm", "GSM"]));
+            const compVals = splitFabricCellValue(getRowValueByAliases(row, ["Composition", "Comp"]));
+            const widthVals = splitFabricCellValue(getRowValueByAliases(row, ["Width", "Fabric Width"]));
+            const headerVals = splitFabricCellValue(getRowValueByAliases(row, ["Header", "Fabric Header", "Fabric_Header"]));
+            const optVals = splitFabricCellValue(getRowValueByAliases(row, ["Opt", "OPT", "Option"]));
+
+            const maxRows = Math.max(typeVals.length, fabricVals.length, gmsVals.length, compVals.length, widthVals.length, headerVals.length, optVals.length, 1);
+            const rows = [];
+            for (let i = 0; i < Math.min(maxRows, FABRIC_OPT_LABELS.length); i++) {
+                rows.push({
+                    opt: optVals[i] || FABRIC_OPT_LABELS[i],
+                    type: typeVals[i] || "",
+                    fabric: fabricVals[i] || "",
+                    gms: gmsVals[i] || "",
+                    composition: compVals[i] || "",
+                    width: widthVals[i] || "",
+                    header: headerVals[i] || ""
+                });
+            }
+            return rows;
+        }
+
+        function createFabricTypeOptions(selectedValue) {
+            const safeValue = String(selectedValue || "").toUpperCase();
+            return `
+                <option value="">Select...</option>
+                <option value="CDL" ${safeValue === "CDL" ? "selected" : ""}>CDL</option>
+                <option value="EXTERNAL" ${safeValue === "EXTERNAL" ? "selected" : ""}>EXTERNAL</option>
+            `;
+        }
+
+        function collectFabricRowsFromTable() {
+            const body = document.getElementById("fabric-table-body");
+            if (!body) return [];
+            const rows = Array.from(body.querySelectorAll("tr"));
+            return rows.map((tr, idx) => ({
+                opt: FABRIC_OPT_LABELS[idx] || "",
+                type: tr.querySelector(".fabric-cell-type")?.value?.trim() || "",
+                fabric: tr.querySelector(".fabric-cell-fabric")?.value?.trim() || "",
+                gms: tr.querySelector(".fabric-cell-gms")?.value?.trim() || "",
+                composition: tr.querySelector(".fabric-cell-composition")?.value?.trim() || "",
+                width: tr.querySelector(".fabric-cell-width")?.value?.trim() || "",
+                header: tr.querySelector(".fabric-cell-header")?.value?.trim() || ""
+            }));
+        }
+
+        function renderFabricTableBody() {
+            const body = document.getElementById("fabric-table-body");
+            if (!body) return;
+            body.innerHTML = "";
+            visibleFabricRows.forEach((fabricRow, index) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><span class="fabric-opt-chip">${FABRIC_OPT_LABELS[index] || fabricRow.opt || ""}</span></td>
+                    <td><select class="fabric-cell-select fabric-cell-type" ${isEditing ? "" : "disabled"}>${createFabricTypeOptions(fabricRow.type)}</select></td>
+                    <td><input type="text" class="fabric-cell-input fabric-cell-fabric" value="${(fabricRow.fabric || "").replace(/"/g, "&quot;")}" ${isEditing ? "" : "disabled"}></td>
+                    <td><input type="text" class="fabric-cell-input fabric-cell-gms" value="${(fabricRow.gms || "").replace(/"/g, "&quot;")}" ${isEditing ? "" : "disabled"}></td>
+                    <td><input type="text" class="fabric-cell-input fabric-cell-composition" value="${(fabricRow.composition || "").replace(/"/g, "&quot;")}" ${isEditing ? "" : "disabled"}></td>
+                    <td><input type="text" class="fabric-cell-input fabric-cell-width" value="${(fabricRow.width || "").replace(/"/g, "&quot;")}" ${isEditing ? "" : "disabled"}></td>
+                    <td><input type="text" class="fabric-cell-input fabric-cell-header" value="${(fabricRow.header || "").replace(/"/g, "&quot;")}" ${isEditing ? "" : "disabled"}></td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        function refreshFabricActionButtons() {
+            const addBtn = document.getElementById("fabric-add-col-btn");
+            const removeBtn = document.getElementById("fabric-remove-col-btn");
+            if (addBtn) {
+                addBtn.disabled = !isEditing || visibleFabricRows.length >= FABRIC_OPT_LABELS.length;
+            }
+            if (removeBtn) {
+                removeBtn.disabled = !isEditing || visibleFabricRows.length <= 1;
+            }
+        }
+
+        function renderFabricTable(row) {
+            const head = document.getElementById("fabric-table-head");
+            if (!head) return;
+
+            head.innerHTML = "";
+
+            FABRIC_TABLE_COLUMNS.forEach(col => {
+                const th = document.createElement("th");
+                th.textContent = col.label;
+                head.appendChild(th);
+            });
+
+            visibleFabricRows = buildFabricRowsFromRow(row);
+            if (visibleFabricRows.length === 0) {
+                visibleFabricRows = [{ opt: "A", type: "", fabric: "", gms: "", composition: "", width: "", header: "" }];
+            }
+            renderFabricTableBody();
+            refreshFabricActionButtons();
+        }
+
+        function addFabricColumn() {
+            if (!isEditing) return;
+            visibleFabricRows = collectFabricRowsFromTable();
+            if (visibleFabricRows.length >= FABRIC_OPT_LABELS.length) return;
+            visibleFabricRows.push({
+                opt: FABRIC_OPT_LABELS[visibleFabricRows.length],
+                type: "",
+                fabric: "",
+                gms: "",
+                composition: "",
+                width: "",
+                header: ""
+            });
+            renderFabricTableBody();
+            refreshFabricActionButtons();
+        }
+
+        function removeFabricColumn() {
+            if (!isEditing) return;
+            visibleFabricRows = collectFabricRowsFromTable();
+            if (visibleFabricRows.length <= 1) return;
+            visibleFabricRows.pop();
+            renderFabricTableBody();
+            refreshFabricActionButtons();
+        }
+
         function closeModal() {
             document.getElementById("request-modal").style.display = "none";
         }
@@ -1566,10 +1905,13 @@
             document.getElementById("main-actions").style.display = "none";
             document.getElementById("btn-edit").style.display = "none";
             document.getElementById("edit-actions").style.display = "flex";
+            visibleFabricRows = collectFabricRowsFromTable();
+            renderFabricTableBody();
+            refreshFabricActionButtons();
 
             // Transform values into inputs
             DETAIL_FIELDS.forEach(field => {
-                if (field === "Folder Path" || field === "Created By" || field === "Requested_Date" || field === "C_Number" || field === "Remarks") return; // Keep non-editable
+                if (field === "Attachments" || field === "Created By" || field === "Req_Date" || field === "C_Number" || field === "Req_Remarks" || field === "Acc_Name") return; // Keep non-editable
 
                 const valSpan = document.getElementById(`val-${field}`);
                 if (valSpan) {
@@ -1601,6 +1943,26 @@
                     }
                 }
             });
+
+            const editedFabricRows = collectFabricRowsFromTable()
+                .map(({ type, fabric, gms, composition, width, header }) => ({
+                    type, fabric, gms, composition, width, header
+                }))
+                .filter(item => item.type || item.fabric || item.gms || item.composition || item.width || item.header);
+            const currentFabricRows = buildFabricRowsFromRow(currentModalRow)
+                .map(({ type, fabric, gms, composition, width, header }) => ({
+                    type, fabric, gms, composition, width, header
+                }))
+                .filter(item => item.type || item.fabric || item.gms || item.composition || item.width || item.header);
+
+            if (JSON.stringify(editedFabricRows) !== JSON.stringify(currentFabricRows)) {
+                const firstRow = editedFabricRows[0] || { type: "", fabric: "", header: "" };
+                updates["Fabric Add Ons"] = JSON.stringify(editedFabricRows);
+                updates["Main Fabric"] = firstRow.fabric || "";
+                updates["Fabric Header"] = firstRow.header || "";
+                updates["Fabric Supplier"] = firstRow.type || "";
+                hasChanges = true;
+            }
 
             if (!hasChanges) {
                 cancelEditMode();
