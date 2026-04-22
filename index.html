@@ -1276,29 +1276,24 @@
                     document.getElementById("table-title").innerText = "Loading Calendar...";
                     try {
                         const fetchAll = async () => {
-                            const statuses = ["Awaiting Meeting", "Cancel", "Awaiting Techpack"];
-                            const promises = statuses.map(s => 
-                                fetch(APPS_SCRIPT_URL, {
-                                    method: 'POST',
-                                    body: JSON.stringify({ action: 'get_all', statusFilter: s }),
-                                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                                }).then(r => r.json())
-                            );
-                            const results = await Promise.all(promises);
-                            let combined = [];
-                            results.forEach(res => {
-                                if (res.status === 'success') combined = combined.concat(res.data);
+                            const res = await fetch(APPS_SCRIPT_URL, {
+                                method: 'POST',
+                                body: JSON.stringify({ 
+                                    action: 'get_all', 
+                                    statusFilter: ["Awaiting Meeting", "Cancel", "Awaiting Techpack"] 
+                                }),
+                                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                             });
-                            return combined;
+                            const result = await res.json();
+                            return result.status === 'success' ? result.data : [];
                         };
 
                         const allData = await fetchAll();
-                        let techpackData = [];
                         globalData = allData.reverse();
                         updateHeroBadges();
                         
-                        const getStatus = (r) => String(r.status || r.Status || (r.raw && r.raw.Status) || "").trim().toLowerCase();
-                        techpackData = globalData.filter(r => getStatus(r) === "awaiting techpack");
+                        const getStatus = (r) => String(rowStatusSafe(r)).trim().toLowerCase();
+                        const techpackData = globalData.filter(r => getStatus(r) === "awaiting techpack");
                         
                         renderCalendar(techpackData);
                         document.getElementById("table-title").innerText = "Calendar View";
@@ -1310,11 +1305,14 @@
             }
         });
 
+        function rowStatusSafe(r) {
+            return r.status || r.Status || (r.raw && r.raw.Status) || "";
+        }
+
         function updateHeroBadges() {
-            const getStatus = (r) => String(r.status || r.Status || (r.raw && r.raw.Status) || "").trim().toLowerCase();
-            const awaitingCount = globalData.filter(r => getStatus(r) === "awaiting meeting").length;
-            const cancelCount = globalData.filter(r => getStatus(r) === "cancel").length;
-            const completeCount = globalData.filter(r => getStatus(r) === "awaiting techpack").length;
+            const awaitingCount = globalData.filter(r => String(rowStatusSafe(r)).trim().toLowerCase() === "awaiting meeting").length;
+            const cancelCount = globalData.filter(r => String(rowStatusSafe(r)).trim().toLowerCase() === "cancel").length;
+            const completeCount = globalData.filter(r => String(rowStatusSafe(r)).trim().toLowerCase() === "awaiting techpack").length;
 
             if (document.getElementById("heroBadgeAwaiting")) document.getElementById("heroBadgeAwaiting").innerText = awaitingCount;
             if (document.getElementById("heroBadgeCancel")) document.getElementById("heroBadgeCancel").innerText = cancelCount;
@@ -1342,26 +1340,22 @@
             document.getElementById("table-body").innerHTML = '<tr><td colspan="8" style="text-align:center;">Loading data from database...</td></tr>';
 
             try {
-                // We MUST fetch all 3 statuses in parallel because the backend filters 'get_all' by status
-                const statuses = ["Awaiting Meeting", "Cancel", "Awaiting Techpack"];
-                const promises = statuses.map(s => 
-                    fetch(APPS_SCRIPT_URL, {
-                        method: 'POST',
-                        body: JSON.stringify({ action: 'get_all', statusFilter: s }),
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                    }).then(r => r.json())
-                );
-                
-                const results = await Promise.all(promises);
-                let combined = [];
-                results.forEach(res => {
-                    if (res.status === 'success' && res.data) combined = combined.concat(res.data);
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        action: 'get_all', 
+                        statusFilter: ["Awaiting Meeting", "Cancel", "Awaiting Techpack"] 
+                    }),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                 });
-
-                globalData = combined.reverse(); // Newest first
-                updateHeroBadges();
-                applyFilters(); 
-                populateFilterOptions();
+                
+                const res = await response.json();
+                if (res.status === 'success' && res.data) {
+                    globalData = res.data.reverse(); // Newest first
+                    updateHeroBadges();
+                    applyFilters(); 
+                    populateFilterOptions();
+                }
                 
             } catch (err) {
                 console.error("Failed to fetch", err);
