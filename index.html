@@ -1050,11 +1050,11 @@
                             <div class="filter-group">
                                 <label>C Number</label>
                                 <div class="custom-select" id="select-C_Number">
-                                    <div class="select-input-wrapper" onclick="openDropdown('C_Number')">
+                                    <div class="select-input-wrapper" onclick="toggleDropdown('C_Number')">
                                         <input type="text" placeholder="Search or select ID..."
+                                            onclick="openDropdown('C_Number'); event.stopPropagation()"
                                             onkeyup="filterOptions('C_Number', this.value)">
-                                        <i data-feather="chevron-down" class="toggle-icon"
-                                            onclick="openDropdown('C_Number')"></i>
+                                        <i data-feather="chevron-down" class="toggle-icon"></i>
                                     </div>
                                     <div class="options-dropdown" id="dropdown-C_Number"></div>
                                 </div>
@@ -1063,11 +1063,11 @@
                             <div class="filter-group">
                                 <label>Customer Reference</label>
                                 <div class="custom-select" id="select-Customer_Ref">
-                                    <div class="select-input-wrapper" onclick="openDropdown('Customer_Ref')">
+                                    <div class="select-input-wrapper" onclick="toggleDropdown('Customer_Ref')">
                                         <input type="text" placeholder="Search or select Customer Reference..."
+                                            onclick="openDropdown('Customer_Ref'); event.stopPropagation()"
                                             onkeyup="filterOptions('Customer_Ref', this.value)">
-                                        <i data-feather="chevron-down" class="toggle-icon"
-                                            onclick="openDropdown('Customer_Ref')"></i>
+                                        <i data-feather="chevron-down" class="toggle-icon"></i>
                                     </div>
                                     <div class="options-dropdown" id="dropdown-Customer_Ref"></div>
                                 </div>
@@ -1076,11 +1076,11 @@
                             <div class="filter-group">
                                 <label>Customer</label>
                                 <div class="custom-select" id="select-Customer">
-                                    <div class="select-input-wrapper" onclick="openDropdown('Customer')">
+                                    <div class="select-input-wrapper" onclick="toggleDropdown('Customer')">
                                         <input type="text" placeholder="Search or select Customer..."
+                                            onclick="openDropdown('Customer'); event.stopPropagation()"
                                             onkeyup="filterOptions('Customer', this.value)">
-                                        <i data-feather="chevron-down" class="toggle-icon"
-                                            onclick="openDropdown('Customer')"></i>
+                                        <i data-feather="chevron-down" class="toggle-icon"></i>
                                     </div>
                                     <div class="options-dropdown" id="dropdown-Customer"></div>
                                 </div>
@@ -1089,11 +1089,11 @@
                             <div class="filter-group">
                                 <label>PL Name</label>
                                 <div class="custom-select" id="select-PL_Name">
-                                    <div class="select-input-wrapper" onclick="openDropdown('PL_Name')">
+                                    <div class="select-input-wrapper" onclick="toggleDropdown('PL_Name')">
                                         <input type="text" placeholder="Search or select PL..."
+                                            onclick="openDropdown('PL_Name'); event.stopPropagation()"
                                             onkeyup="filterOptions('PL_Name', this.value)">
-                                        <i data-feather="chevron-down" class="toggle-icon"
-                                            onclick="openDropdown('PL_Name')"></i>
+                                        <i data-feather="chevron-down" class="toggle-icon"></i>
                                     </div>
                                     <div class="options-dropdown" id="dropdown-PL_Name"></div>
                                 </div>
@@ -1102,11 +1102,11 @@
                             <div class="filter-group">
                                 <label>Status</label>
                                 <div class="custom-select" id="select-Status">
-                                    <div class="select-input-wrapper" onclick="openDropdown('Status')">
+                                    <div class="select-input-wrapper" onclick="toggleDropdown('Status')">
                                         <input type="text" placeholder="Search or select Status..."
+                                            onclick="openDropdown('Status'); event.stopPropagation()"
                                             onkeyup="filterOptions('Status', this.value)">
-                                        <i data-feather="chevron-down" class="toggle-icon"
-                                            onclick="openDropdown('Status')"></i>
+                                        <i data-feather="chevron-down" class="toggle-icon"></i>
                                     </div>
                                     <div class="options-dropdown" id="dropdown-Status"></div>
                                 </div>
