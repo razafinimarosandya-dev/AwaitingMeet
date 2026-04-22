@@ -279,9 +279,7 @@
         background: #f8fafc;
     }
 
-    .header-action-btn.export-btn {
-        color: #475569;
-    }
+    .header-action-btn.export-btn { color: #475569; }
 
     .table-card {
         background: var(--bg-surface);
@@ -786,7 +784,6 @@
         color: #1d4ed8;
         font-weight: 600;
     }
-
     .hero-stats {
         display: flex;
         gap: 12px;
@@ -813,17 +810,9 @@
         border-radius: 50%;
     }
 
-    .hero-badge-dot.emerald {
-        background-color: #10b981;
-    }
-
-    .hero-badge-dot.blue {
-        background-color: #3b82f6;
-    }
-
-    .hero-badge-dot.red {
-        background-color: #ef4444;
-    }
+    .hero-badge-dot.emerald { background-color: #10b981; }
+    .hero-badge-dot.blue { background-color: #3b82f6; }
+    .hero-badge-dot.red { background-color: #ef4444; }
 
     .hero-badge strong {
         font-weight: 700;
@@ -983,14 +972,14 @@
 
                             <div class="filter-group">
                                 <label>Customer Reference</label>
-                                <div class="custom-select" id="select-Title">
-                                    <div class="select-input-wrapper" onclick="openDropdown('Title')">
+                                <div class="custom-select" id="select-Customer_Ref">
+                                    <div class="select-input-wrapper" onclick="openDropdown('Customer_Ref')">
                                         <input type="text" placeholder="Search or select Customer Reference..."
-                                            onkeyup="filterOptions('Title', this.value)">
+                                            onkeyup="filterOptions('Customer_Ref', this.value)">
                                         <i data-feather="chevron-down" class="toggle-icon"
-                                            onclick="openDropdown('Title')"></i>
+                                            onclick="openDropdown('Customer_Ref')"></i>
                                     </div>
-                                    <div class="options-dropdown" id="dropdown-Title"></div>
+                                    <div class="options-dropdown" id="dropdown-Customer_Ref"></div>
                                 </div>
                             </div>
 
@@ -1037,8 +1026,7 @@
                         <div class="filter-footer">
                             <button class="btn-secondary" type="button" id="btn-filter-cancel">Cancel</button>
                             <button class="btn-secondary" type="button" onclick="resetFilters()">Clear Filters</button>
-                            <button class="btn-primary" type="button"
-                                onclick="applyFilters(); closeFilterModal();">Apply Filters</button>
+                            <button class="btn-primary" type="button" onclick="applyFilters(); closeFilterModal();">Apply Filters</button>
                         </div>
                     </div>
                 </div>
@@ -1133,8 +1121,8 @@
                             <div class="fabric-col-actions">
                                 <button type="button" class="fabric-col-btn" id="fabric-remove-col-btn"
                                     title="Remove option" onclick="removeFabricColumn()">-</button>
-                                <button type="button" class="fabric-col-btn" id="fabric-add-col-btn" title="Add option"
-                                    onclick="addFabricColumn()">+</button>
+                                <button type="button" class="fabric-col-btn" id="fabric-add-col-btn"
+                                    title="Add option" onclick="addFabricColumn()">+</button>
                             </div>
                         </div>
                         <table class="fabric-table">
@@ -1200,7 +1188,7 @@
 
     <script>
         feather.replace();
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZ4f9sdtoTb2Ps0E5Q8NX1FV7qhfJXEx-AzazDqZLfsnkfKhV3xqEMBPVGdTYuWh8TSg/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzSdyx3uNKZPhbhwg_eIc_VmRTvUNF8-Q5z9hunbr7seSuz2nNdO-awDI8qserEQHkr/exec";
 
         let globalData = [];
         let filteredData = [];
@@ -1208,7 +1196,7 @@
         let globalSearchText = "";
         let activeFilters = {
             "C_Number": [],
-            "Title": [],
+            "Customer_Ref": [],
             "Customer": [],
             "PL_Name": [],
             "Status": []
@@ -1289,7 +1277,7 @@
                     try {
                         const fetchAll = async () => {
                             const statuses = ["Awaiting Meeting", "Cancel", "Awaiting Techpack"];
-                            const promises = statuses.map(s =>
+                            const promises = statuses.map(s => 
                                 fetch(APPS_SCRIPT_URL, {
                                     method: 'POST',
                                     body: JSON.stringify({ action: 'get_all', statusFilter: s }),
@@ -1308,10 +1296,10 @@
                         let techpackData = [];
                         globalData = allData.reverse();
                         updateHeroBadges();
-
+                        
                         const getStatus = (r) => String(r.status || r.Status || (r.raw && r.raw.Status) || "").trim().toLowerCase();
                         techpackData = globalData.filter(r => getStatus(r) === "awaiting techpack");
-
+                        
                         renderCalendar(techpackData);
                         document.getElementById("table-title").innerText = "Calendar View";
                     } catch (err) {
@@ -1356,14 +1344,14 @@
             try {
                 // We MUST fetch all 3 statuses in parallel because the backend filters 'get_all' by status
                 const statuses = ["Awaiting Meeting", "Cancel", "Awaiting Techpack"];
-                const promises = statuses.map(s =>
+                const promises = statuses.map(s => 
                     fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
                         body: JSON.stringify({ action: 'get_all', statusFilter: s }),
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                     }).then(r => r.json())
                 );
-
+                
                 const results = await Promise.all(promises);
                 let combined = [];
                 results.forEach(res => {
@@ -1372,9 +1360,9 @@
 
                 globalData = combined.reverse(); // Newest first
                 updateHeroBadges();
-                applyFilters();
+                applyFilters(); 
                 populateFilterOptions();
-
+                
             } catch (err) {
                 console.error("Failed to fetch", err);
                 document.getElementById("table-body").innerHTML = '<tr><td colspan="8">Failed to fetch data... Verify APPS_SCRIPT_URL.</td></tr>';
@@ -1434,7 +1422,7 @@
 
                 container.innerHTML = "";
                 uniqueValues.forEach(val => {
-                    const isSelected = activeFilters[field].includes(val);
+                    const isSelected = (activeFilters[field] || []).includes(val);
                     const label = document.createElement('label');
                     label.className = `filter-option ${isSelected ? "selected" : ""}`;
                     label.innerHTML = `
@@ -1457,6 +1445,7 @@
         }
 
         function handleOptionSelect(field, val) {
+            if (!activeFilters[field]) activeFilters[field] = [];
             if (activeFilters[field].includes(val)) {
                 activeFilters[field] = activeFilters[field].filter(v => v !== val);
             } else {
@@ -1504,10 +1493,10 @@
                     String(row["Customer"] || (row.raw && row.raw["Customer"]) || "").toLowerCase().includes(globalSearchText);
 
                 return matchSearch &&
-                    (activeFilters["C_Number"].length === 0 || activeFilters["C_Number"].includes(row["C_Number"] || (row.raw && row.raw["C_Number"]))) &&
-                    (activeFilters["Customer_Ref"].length === 0 || activeFilters["Customer_Ref"].includes(row["Customer_Ref"] || (row.raw && row.raw["Customer_Ref"]))) &&
-                    (activeFilters["Customer"].length === 0 || activeFilters["Customer"].includes(row["Customer"] || (row.raw && row.raw["Customer"]))) &&
-                    (activeFilters["PL_Name"].length === 0 || activeFilters["PL_Name"].includes(row["PL_Name"] || (row.raw && row.raw["PL_Name"])));
+                    ((activeFilters["C_Number"] || []).length === 0 || (activeFilters["C_Number"] || []).includes(row["C_Number"] || (row.raw && row.raw["C_Number"]))) &&
+                    ((activeFilters["Customer_Ref"] || []).length === 0 || (activeFilters["Customer_Ref"] || []).includes(row["Customer_Ref"] || (row.raw && row.raw["Customer_Ref"]))) &&
+                    ((activeFilters["Customer"] || []).length === 0 || (activeFilters["Customer"] || []).includes(row["Customer"] || (row.raw && row.raw["Customer"]))) &&
+                    ((activeFilters["PL_Name"] || []).length === 0 || (activeFilters["PL_Name"] || []).includes(row["PL_Name"] || (row.raw && row.raw["PL_Name"])));
             });
 
             renderTable();
