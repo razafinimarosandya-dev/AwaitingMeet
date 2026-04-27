@@ -2249,8 +2249,9 @@
 
             const payload = {
                 action: 'update',
+                requestId: currentModalRow["C_Number"],
                 rowIndex: currentModalRow._rowIndex,
-                updates: updates
+                ...updates
             };
 
             try {
@@ -2261,20 +2262,24 @@
                 });
                 const result = await res.json();
 
-                if (result.status === 'success') {
-                    // update local data
+                if (result.status === 'success' || result.success === true) {
+                    // Update local data
                     Object.assign(currentModalRow, updates);
                     renderTable();
                     closeModal();
+                    if (typeof fetchData === 'function') fetchData(); // Refresh all
                 } else {
-                    alert("Update failed: " + result.message);
+                    alert("Update failed: " + (result.message || result.error || "Unknown error"));
                 }
             } catch (err) {
                 console.error(err);
-                alert("Action failed. See console.");
+                alert("Action failed. Please check your connection or console logs.");
             } finally {
+                const btnSave = document.getElementById("btn-save");
+                const btnCancel = document.getElementById("btn-cancel");
+                const btnProcess = document.getElementById("btn-process");
                 if (btnSave) { btnSave.innerHTML = "Save Changes"; btnSave.disabled = false; }
-                if (btnCancel) { btnCancel.innerHTML = "Not Proceed"; btnCancel.disabled = false; }
+                if (btnCancel) { btnCancel.disabled = false; }
                 if (btnProcess) { btnProcess.innerHTML = "Submit"; btnProcess.disabled = false; }
             }
         }
