@@ -2289,14 +2289,27 @@
             let dayCounts = {};
             const parseDate = (dStr) => {
                 if (!dStr) return null;
-                if (typeof dStr === 'string' && dStr.includes('/')) {
-                    const parts = dStr.split(/[ /:]/);
-                    if (parts.length >= 3) {
-                        return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-                    }
+                if (dStr instanceof Date) return dStr;
+                let s = String(dStr).trim();
+                if (s === '-' || s === '') return null;
+                
+                // Try DD/MM/YYYY or DD/MM/YY (with potential time)
+                const ddmm = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
+                if (ddmm) {
+                    const d = parseInt(ddmm[1], 10);
+                    const m = parseInt(ddmm[2], 10) - 1;
+                    let y = parseInt(ddmm[3], 10);
+                    if (y < 100) y += 2000;
+                    return new Date(y, m, d);
                 }
-                const d = new Date(dStr);
-                return isNaN(d) ? null : d;
+                
+                const d = new Date(s);
+                return isNaN(d.getTime()) ? null : d;
+            };
+
+            const getProp = (obj, search) => {
+                const k = Object.keys(obj).find(key => key.toLowerCase().replace(/[\s_]/g, '') === search.toLowerCase().replace(/[\s_]/g, ''));
+                return k ? obj[k] : null;
             };
 
             data.forEach(row => {
@@ -2304,10 +2317,9 @@
                 let dateVal = "";
                 
                 if (st === "awaiting meeting") {
-                    dateVal = row.Meeting_Date_Time || row.meeting_date || "";
+                    dateVal = getProp(row, "Meeting_Date_Time") || getProp(row, "Meeting Date Time") || row.meeting_date || "";
                 } else if (st === "awaiting techpack") {
-                    // Show completed meetings on their expected date if completion date is missing
-                    dateVal = row.Costing_Expected_Date || row.due || "";
+                    dateVal = getProp(row, "Costing_Expected_Date") || getProp(row, "Costing Expected Date") || row.due || "";
                 }
 
                 if (dateVal) {
@@ -2360,7 +2372,16 @@
 
                     countBadge.addEventListener('click', () => {
                         const dailyReqs = data.filter(r => {
-                            const rd = parseDate(r.Tehpack_uplaodDate);
+                            const st = String(rowStatusSafe(r)).toLowerCase().trim();
+                            let dVal = "";
+                            if (st === "awaiting meeting") {
+                                dVal = r.Meeting_Date_Time || r.meeting_date || "";
+                            } else if (st === "awaiting techpack") {
+                                dVal = r.Costing_Expected_Date || r.due || "";
+                            }
+                            
+                            if (!dVal) return false;
+                            const rd = parseDate(dVal);
                             return rd && rd.getFullYear() === year && rd.getMonth() === month && rd.getDate() === i;
                         });
                         const modal = document.getElementById('calendar-day-modal');
