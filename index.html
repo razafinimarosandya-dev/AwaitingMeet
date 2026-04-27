@@ -355,9 +355,7 @@
         background: #f8fafc;
     }
 
-    .header-action-btn.export-btn {
-        color: #475569;
-    }
+    .header-action-btn.export-btn { color: #475569; }
 
     .table-card {
         background: var(--bg-surface);
@@ -899,7 +897,6 @@
         color: #1d4ed8;
         font-weight: 600;
     }
-
     .hero-stats {
         display: flex;
         gap: 12px;
@@ -926,17 +923,9 @@
         border-radius: 50%;
     }
 
-    .hero-badge-dot.emerald {
-        background-color: #10b981;
-    }
-
-    .hero-badge-dot.blue {
-        background-color: #3b82f6;
-    }
-
-    .hero-badge-dot.red {
-        background-color: #ef4444;
-    }
+    .hero-badge-dot.emerald { background-color: #10b981; }
+    .hero-badge-dot.blue { background-color: #3b82f6; }
+    .hero-badge-dot.red { background-color: #ef4444; }
 
     .hero-badge strong {
         font-weight: 700;
@@ -1029,10 +1018,9 @@
             <i data-feather="bell" class="icon-btn"></i>
             <div class="profile-container" id="profile-trigger">
                 <div class="profile-pic">
-                    <img id="user-avatar" src="https://ui-avatars.com/api/?name=User&background=333&color=fff"
-                        alt="User" />
+                    <img id="user-avatar" src="https://ui-avatars.com/api/?name=User&background=333&color=fff" alt="User" />
                 </div>
-
+                
                 <!-- Dropdown Menu -->
                 <div class="user-dropdown" id="user-dropdown">
                     <div class="dropdown-header">
@@ -1165,8 +1153,7 @@
                         <div class="filter-footer">
                             <button class="btn-secondary" type="button" id="btn-filter-cancel">Cancel</button>
                             <button class="btn-secondary" type="button" onclick="resetFilters()">Clear Filters</button>
-                            <button class="btn-primary" type="button"
-                                onclick="applyFilters(); closeFilterModal();">Apply Filters</button>
+                            <button class="btn-primary" type="button" onclick="applyFilters(); closeFilterModal();">Apply Filters</button>
                         </div>
                     </div>
                 </div>
@@ -1194,9 +1181,7 @@
                     <div class="table-footer">
                         <div style="display: flex; align-items: center; gap: 16px;">
                             <span id="total-requests">Total Requests: 0</span>
-                            <span id="page-info"
-                                style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Page 1 of
-                                1</span>
+                            <span id="page-info" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Page 1 of 1</span>
                         </div>
                         <div class="pagination">
                             <button class="btn-page" id="btn-prev-page" disabled>Previous</button>
@@ -1260,14 +1245,17 @@
             <div class="modal-body">
                 <form id="edit-form">
                     <input type="hidden" id="edit-row-index">
-                    <div class="fabric-table-wrap" id="fabric-table-wrap">
+                    <div class="form-grid" id="modal-details-list">
+                        <!-- Details injected here -->
+                    </div>
+                    <div class="fabric-table-wrap" id="fabric-table-wrap" style="margin-top: 25px; border-top: 2px solid #e2e8f0; padding-top: 15px;">
                         <div class="fabric-table-toolbar">
                             <span class="fabric-table-title">Fabric Details</span>
                             <div class="fabric-col-actions">
                                 <button type="button" class="fabric-col-btn" id="fabric-remove-col-btn"
                                     title="Remove option" onclick="removeFabricColumn()">-</button>
-                                <button type="button" class="fabric-col-btn" id="fabric-add-col-btn" title="Add option"
-                                    onclick="addFabricColumn()">+</button>
+                                <button type="button" class="fabric-col-btn" id="fabric-add-col-btn"
+                                    title="Add option" onclick="addFabricColumn()">+</button>
                             </div>
                         </div>
                         <table class="fabric-table">
@@ -1276,9 +1264,6 @@
                             </thead>
                             <tbody id="fabric-table-body"></tbody>
                         </table>
-                    </div>
-                    <div class="form-grid" id="modal-details-list">
-                        <!-- Details injected here -->
                     </div>
                 </form>
             </div>
@@ -1353,7 +1338,7 @@
         const DETAIL_FIELDS = [
             "C_Number", "Customer_Ref", "Customer", "Customer_Department", "Season",
             "Main Fabric", "Fabric Header", "PL_Name", "Acc_Name", "Status",
-            "Req_Date", "Created By", "Req_Remarks", "Attachments"
+            "Req_Date", "Created By", "Req_Remarks"
         ];
         const FABRIC_TABLE_COLUMNS = [
             { key: "opt", label: "OPT", aliases: ["Opt", "OPT", "Option"] },
@@ -1449,9 +1434,9 @@
                         const fetchAll = async () => {
                             const res = await fetch(APPS_SCRIPT_URL, {
                                 method: 'POST',
-                                body: JSON.stringify({
-                                    action: 'get_all',
-                                    statusFilter: ["Awaiting Meeting", "Cancel", "Awaiting Techpack"]
+                                body: JSON.stringify({ 
+                                    action: 'get_all', 
+                                    statusFilter: ["Awaiting Meeting", "Cancel", "Awaiting Techpack"] 
                                 }),
                                 headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                             });
@@ -1462,10 +1447,10 @@
                         const allData = await fetchAll();
                         globalData = allData.reverse();
                         updateHeroBadges();
-
+                        
                         const getStatus = (r) => String(rowStatusSafe(r)).trim().toLowerCase();
                         const techpackData = globalData.filter(r => getStatus(r) === "awaiting techpack");
-
+                        
                         renderCalendar(techpackData);
                         document.getElementById("table-title").innerText = "Calendar View";
                     } catch (err) {
@@ -1513,21 +1498,21 @@
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        action: 'get_all',
-                        statusFilter: ["Awaiting Meeting", "Cancel", "Awaiting Techpack"]
+                    body: JSON.stringify({ 
+                        action: 'get_all', 
+                        statusFilter: ["Awaiting Meeting", "Cancel", "Awaiting Techpack"] 
                     }),
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                 });
-
+                
                 const res = await response.json();
                 if (res.status === 'success' && res.data) {
                     globalData = res.data.reverse(); // Newest first
                     updateHeroBadges();
-                    applyFilters();
+                    applyFilters(); 
                     populateFilterOptions();
                 }
-
+                
             } catch (err) {
                 console.error("Failed to fetch", err);
                 document.getElementById("table-body").innerHTML = '<tr><td colspan="8">Failed to fetch data... Verify APPS_SCRIPT_URL.</td></tr>';
@@ -1577,7 +1562,7 @@
             const hash = window.location.hash;
             const urlParams = new URLSearchParams(window.location.search);
             const querySession = urlParams.get('session');
-
+            
             let encodedData = null;
             if (hash.startsWith('#session=')) {
                 encodedData = hash.substring(9);
@@ -1755,7 +1740,7 @@
             const btnPrev = document.getElementById("btn-prev-page");
             const btnNext = document.getElementById("btn-next-page");
             const pageInfo = document.getElementById("page-info");
-
+            
             tbody.innerHTML = "";
             document.getElementById("total-requests").innerText = `Total Requests: ${filteredData.length}`;
 
@@ -1929,7 +1914,7 @@
                 if (val === undefined || val === "" || val === null) val = "N/A";
 
                 let displayVal = val;
-
+                
                 // Special formatting for Req_Date
                 if (field === "Req_Date" && val !== "N/A") {
                     let d = (val instanceof Date) ? val : new Date(val);
@@ -1953,23 +1938,6 @@
                 list.appendChild(card);
             });
 
-            // Append Folder Path at the VERY END (Full Width)
-            const attachmentVal = row["Attachments"] || row["Attachment_URL"] || row["folderLink"] || "";
-            if (attachmentVal && attachmentVal !== "N/A" && String(attachmentVal).trim() !== "") {
-                const folderCard = document.createElement('div');
-                folderCard.className = "detail-card";
-                folderCard.style.gridColumn = "1 / -1";
-                folderCard.style.marginTop = "12px";
-                let displayVal = attachmentVal;
-                if (String(attachmentVal).startsWith("http")) {
-                    displayVal = `<a href="${attachmentVal}" target="_blank" style="color:#3b82f6; font-weight: 700; text-decoration:none;">Open Folder</a>`;
-                }
-                folderCard.innerHTML = `
-                    <span class="detail-label">Folder Path</span>
-                    <div class="detail-value" id="val-Attachments">${displayVal}</div>
-                `;
-                list.appendChild(folderCard);
-            }
 
             cancelEditMode(true); // reset state without triggering re-render
             document.getElementById("request-modal").style.display = "flex";
