@@ -1421,7 +1421,6 @@
             document.getElementById("nav-awaiting-meeting").addEventListener("click", (e) => { e.preventDefault(); document.querySelector('.requests-list').style.display = 'block'; document.getElementById('calendar-section').style.display = 'none'; fetchData("Awaiting Meeting", e.target); });
             document.getElementById("nav-cancel").addEventListener("click", (e) => { e.preventDefault(); document.querySelector('.requests-list').style.display = 'block'; document.getElementById('calendar-section').style.display = 'none'; fetchData("Cancel", e.target); });
             document.getElementById("nav-awaiting-techpack").addEventListener("click", (e) => { e.preventDefault(); document.querySelector('.requests-list').style.display = 'block'; document.getElementById('calendar-section').style.display = 'none'; fetchData("Awaiting Techpack", e.target); });
-
             const navCalendar = document.getElementById("nav-calendar");
             if (navCalendar) {
                 navCalendar.addEventListener("click", async (e) => {
@@ -1431,36 +1430,18 @@
                     document.querySelector('.requests-list').style.display = 'none';
                     document.getElementById('calendar-section').style.display = 'block';
 
-                    document.getElementById("table-title").innerText = "Loading Calendar...";
-                    try {
-                        const fetchAll = async () => {
-                            const res = await fetch(APPS_SCRIPT_URL, {
-                                method: 'POST',
-                                body: JSON.stringify({ 
-                                    action: 'get_all', 
-                                    statusFilter: ["Awaiting Meeting", "Cancel", "Awaiting Techpack"] 
-                                }),
-                                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                            });
-                            const result = await res.json();
-                            return result.status === 'success' ? result.data : [];
-                        };
-
-                        const allData = await fetchAll();
-                        globalData = allData.reverse();
-                        updateHeroBadges();
-                        
-                        const getStatus = (r) => String(rowStatusSafe(r)).trim().toLowerCase();
-                        const techpackData = globalData.filter(r => getStatus(r) === "awaiting techpack");
-                        
-                        renderCalendar(techpackData);
-                        document.getElementById("table-title").innerText = "Calendar View";
-                    } catch (err) {
-                        console.error(err);
-                        document.getElementById("table-title").innerText = "Calendar Load Error";
+                    document.getElementById("table-title").innerText = "Calendar View";
+                    
+                    // Optimization: If globalData is empty, fetch it once. Otherwise use cache.
+                    if (!globalData || globalData.length === 0) {
+                        document.getElementById("table-title").innerText = "Loading Calendar...";
+                        await fetchData("Awaiting Meeting");
                     }
+                    
+                    renderCalendar(globalData);
                 });
             }
+
         });
 
         function rowStatusSafe(r) {
@@ -2319,11 +2300,23 @@
             };
 
             data.forEach(row => {
-                const d = parseDate(row.Tehpack_uplaodDate);
-                if (d) {
-                    if (d.getFullYear() === year && d.getMonth() === month) {
-                        let day = d.getDate();
-                        dayCounts[day] = (dayCounts[day] || 0) + 1;
+                const st = String(rowStatusSafe(row)).toLowerCase().trim();
+                let dateVal = "";
+                
+                if (st === "awaiting meeting") {
+                    dateVal = row.Meeting_Date_Time || row.meeting_date || "";
+                } else if (st === "awaiting techpack") {
+                    // Show completed meetings on their expected date if completion date is missing
+                    dateVal = row.Costing_Expected_Date || row.due || "";
+                }
+
+                if (dateVal) {
+                    const d = parseDate(dateVal);
+                    if (d) {
+                        if (d.getFullYear() === year && d.getMonth() === month) {
+                            let day = d.getDate();
+                            dayCounts[day] = (dayCounts[day] || 0) + 1;
+                        }
                     }
                 }
             });
