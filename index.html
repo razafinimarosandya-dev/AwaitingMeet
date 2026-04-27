@@ -2203,7 +2203,7 @@
                 const day = String(d.getDate()).padStart(2, '0');
                 const month = String(d.getMonth() + 1).padStart(2, '0');
                 const year = d.getFullYear();
-                updates["Tehpack_uplaodDate"] = `${year}-${month}-${day}`;
+                updates["Meeting_Completion_Date"] = `${day}/${month}/${year}`;
             }
             await performUpdate(updates);
         }
@@ -2319,7 +2319,7 @@
                 if (st === "awaiting meeting") {
                     dateVal = getProp(row, "Meeting_Date_Time") || getProp(row, "Meeting Date Time") || row.meeting_date || "";
                 } else if (st === "awaiting techpack") {
-                    dateVal = getProp(row, "Costing_Expected_Date") || getProp(row, "Costing Expected Date") || row.due || "";
+                    dateVal = getProp(row, "Meeting_Completion_Date") || getProp(row, "Meeting Completion Date") || "";
                 }
 
                 if (dateVal) {
@@ -2375,9 +2375,9 @@
                             const st = String(rowStatusSafe(r)).toLowerCase().trim();
                             let dVal = "";
                             if (st === "awaiting meeting") {
-                                dVal = r.Meeting_Date_Time || r.meeting_date || "";
+                                dVal = getProp(r, "Meeting_Date_Time") || getProp(r, "Meeting Date Time") || r.meeting_date || "";
                             } else if (st === "awaiting techpack") {
-                                dVal = r.Costing_Expected_Date || r.due || "";
+                                dVal = getProp(r, "Meeting_Completion_Date") || getProp(r, "Meeting Completion Date") || "";
                             }
                             
                             if (!dVal) return false;
