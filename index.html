@@ -12,6 +12,8 @@
 
     <!-- Feather Icons for lightweight SVGs -->
     <script src="https://unpkg.com/feather-icons"></script>
+    <!-- SheetJS for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <style>
     :root {
@@ -1826,6 +1828,7 @@
                 return;
             }
 
+            // Prepare data for XLSX
             const columns = [
                 { key: "C_Number", label: "C Number" },
                 { key: "Customer_Ref", label: "Customer Reference" },
@@ -1836,38 +1839,34 @@
                 { key: "Meeting Date", label: "Meeting Date" }
             ];
 
-            const escapeCsv = (value) => {
-                const text = String(value ?? "");
-                if (text.includes(",") || text.includes('"') || text.includes("\n") || text.includes("\r")) {
-                    return `"${text.replace(/"/g, '""')}"`;
-                }
-                return text;
-            };
+            const excelData = filteredData.map(row => {
+                const obj = {};
+                columns.forEach(col => {
+                    let val = row[col.key] ?? (row.raw && row.raw[col.key]) ?? "";
+                    // Date formatting if needed
+                    if (col.key.toLowerCase().includes("date") && val && !isNaN(new Date(val).getTime())) {
+                        const d = new Date(val);
+                        val = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+                    }
+                    obj[col.label] = val;
+                });
+                return obj;
+            });
 
-            const headerRow = columns.map((col) => escapeCsv(col.label)).join(",");
-            const dataRows = filteredData.map((row) =>
-                columns
-                    .map((col) => {
-                        const cellValue = row[col.key] ?? (row.raw && row.raw[col.key]) ?? "";
-                        return escapeCsv(cellValue);
-                    })
-                    .join(",")
-            );
-            const csvContent = [headerRow, ...dataRows].join("\r\n");
+            // Create Worksheet
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            
+            // Create Workbook
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Meeting Data");
 
+            // Define Filename
             const statusLabel = getStatusDisplayLabel(activeViewMode).replace(/\s+/g, "_");
             const timestamp = new Date().toISOString().slice(0, 10);
-            const fileName = `Meeting_${statusLabel}_${timestamp}.csv`;
+            const fileName = `Meeting_${statusLabel}_${timestamp}.xlsx`;
 
-            const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            // Export to File
+            XLSX.writeFile(workbook, fileName);
         }
 
         function openModalById(c_num) {
