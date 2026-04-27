@@ -1885,6 +1885,8 @@
             list.innerHTML = "";
 
             DETAIL_FIELDS.forEach(field => {
+                if (field === "Attachments") return; // Handle Folder Path at the very end
+
                 const card = document.createElement('div');
                 card.className = "detail-card";
 
@@ -1892,12 +1894,11 @@
                 if (field === "C_Number") labelName = "C Number";
                 if (field === "Customer_Ref") labelName = "Customer Reference";
                 if (field === "Customer_Department") labelName = "Cus Dept";
-                if (field === "Season") labelName = "Season";
+                if (field === "Season") labelName = "TKL Season";
                 if (field === "PL_Name") labelName = "PL Name";
                 if (field === "Acc_Name") labelName = "Acc Name";
                 if (field === "Req_Date") labelName = "Created";
                 if (field === "Req_Remarks") labelName = "Remarks";
-                if (field === "Attachments") labelName = "Folder Path";
 
                 let val = row[field];
                 if (field === "Acc_Name") {
@@ -1925,10 +1926,6 @@
                     }
                 }
 
-                if (field === "Attachments" && val !== "N/A" && String(val).startsWith("http")) {
-                    displayVal = `<a href="${val}" target="_blank" style="color:#3b82f6; text-decoration:none;">Open Folder</a>`;
-                }
-
                 if (field === "Status") {
                     const statusClass = String(val).toLowerCase().replace(/\s+/g, '-');
                     displayVal = `<span class="status-pill ${statusClass}">${val}</span>`;
@@ -1940,6 +1937,24 @@
                 `;
                 list.appendChild(card);
             });
+
+            // Append Folder Path at the VERY END (Full Width)
+            const attachmentVal = row["Attachments"] || row["Attachment_URL"] || row["folderLink"] || "";
+            if (attachmentVal && attachmentVal !== "N/A" && String(attachmentVal).trim() !== "") {
+                const folderCard = document.createElement('div');
+                folderCard.className = "detail-card";
+                folderCard.style.gridColumn = "1 / -1";
+                folderCard.style.marginTop = "12px";
+                let displayVal = attachmentVal;
+                if (String(attachmentVal).startsWith("http")) {
+                    displayVal = `<a href="${attachmentVal}" target="_blank" style="color:#3b82f6; font-weight: 700; text-decoration:none;">Open Folder</a>`;
+                }
+                folderCard.innerHTML = `
+                    <span class="detail-label">Folder Path</span>
+                    <div class="detail-value" id="val-Attachments">${displayVal}</div>
+                `;
+                list.appendChild(folderCard);
+            }
 
             cancelEditMode(true); // reset state without triggering re-render
             document.getElementById("request-modal").style.display = "flex";
